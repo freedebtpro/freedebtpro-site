@@ -223,10 +223,16 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
     ⚠️ <b>AVISO:</b> FreeDebt Pro es una herramienta educativa de organización financiera. No proporciona asesoría financiera, legal ni crediticia.
   </div>
   <div class="hero-btns">
-    <a href="#precios" class="btn-primary" onclick="fbq('track','Lead',{content_name:'Hero Primary',content_category:'paid'})">Ver Planes Pro</a>
-    <button class="btn-outline" onclick="abrirModalGratis()">Probar Gratis</button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+      <a href="#precios" class="btn-primary" onclick="fbq('track','Lead',{content_name:'Hero Primary',content_category:'paid'})">Ver Planes Pro</a>
+      <p style="font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace">Empieza hoy — toma menos de 5 minutos</p>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+      <button class="btn-outline" onclick="abrirModalGratis()">Probar Gratis</button>
+      <p style="font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace">Sin tarjeta en plan gratis</p>
+    </div>
   </div>
-  <p style="margin-top:20px;font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;animation:rise .7s .25s ease both">Más de 500 usuarios ya están organizando sus deudas con FreeDebt Pro</p>
+  <p style="margin-top:20px;font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;animation:rise .7s .25s ease both">Más de 500 usuarios ya están organizando sus deudas con FreeDebt Pro • Cancela cuando quieras</p>
 </section>
 
 <div class="ticker">
@@ -346,22 +352,61 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
       * Ejemplo basado en una deuda promedio de $10,000 al 24% APR. Los resultados varían según cada caso.
     </div>
 
-    <!-- TESTIMONIAL -->
-    <div style="margin-top:64px; max-width:600px; margin-left:auto; margin-right:auto; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:24px; padding:32px; position:relative">
-      <div style="position:absolute; top:-20px; left:50%; transform:translateX(-50%); width:40px; height:40px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--dark)">“</div>
-      <p style="font-size:18px; font-style:italic; color:var(--white); line-height:1.6; margin-bottom:16px">"Reducí mi tiempo de deuda de 5 años a 2.5 años usando FreeDebt Pro"</p>
-      <div style="display:flex; align-items:center; justify-content:center; gap:12px">
-        <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--green), var(--green2)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--dark); font-size:12px">MG</div>
-        <div style="text-align:left">
-          <div style="font-weight:800; font-size:14px; color:var(--white)">María G.</div>
-          <div style="font-size:12px; color:var(--muted)">Miami, FL</div>
+    <!-- TESTIMONIALS GRID -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:32px; margin-top:64px">
+      <!-- Maria G -->
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:24px; padding:32px; position:relative; text-align:center">
+        <div style="position:absolute; top:-20px; left:50%; transform:translateX(-50%); width:40px; height:40px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--dark)">“</div>
+        <p style="font-size:16px; font-style:italic; color:var(--white); line-height:1.6; margin-bottom:16px">"Reducí mi tiempo de deuda de 5 años a 2.5 años usando FreeDebt Pro"</p>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px">
+          <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--green), var(--green2)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--dark); font-size:12px">MG</div>
+          <div style="text-align:left">
+            <div style="font-weight:800; font-size:14px; color:var(--white)">María G.</div>
+            <div style="font-size:12px; color:var(--muted)">Miami, FL</div>
+          </div>
+        </div>
+      </div>
+      <!-- Carlos M -->
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:24px; padding:32px; position:relative; text-align:center">
+        <div style="position:absolute; top:-20px; left:50%; transform:translateX(-50%); width:40px; height:40px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--dark)">“</div>
+        <p style="font-size:16px; font-style:italic; color:var(--white); line-height:1.6; margin-bottom:16px">"Antes solo pagaba el mínimo y no entendía por qué nunca bajaba mi deuda. Ahora tengo un plan claro."</p>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px">
+          <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--green), var(--green2)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--dark); font-size:12px">CM</div>
+          <div style="text-align:left">
+            <div style="font-weight:800; font-size:14px; color:var(--white)">Carlos M.</div>
+            <div style="font-size:12px; color:var(--muted)">Orlando, FL</div>
+          </div>
+        </div>
+      </div>
+      <!-- Ana R -->
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:24px; padding:32px; position:relative; text-align:center">
+        <div style="position:absolute; top:-20px; left:50%; transform:translateX(-50%); width:40px; height:40px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--dark)">“</div>
+        <p style="font-size:16px; font-style:italic; color:var(--white); line-height:1.6; margin-bottom:16px">"Pensé que necesitaba consolidar mis deudas, pero realmente lo que necesitaba era organización."</p>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px">
+          <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--green), var(--green2)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--dark); font-size:12px">AR</div>
+          <div style="text-align:left">
+            <div style="font-weight:800; font-size:14px; color:var(--white)">Ana R.</div>
+            <div style="font-size:12px; color:var(--muted)">Houston, TX</div>
+          </div>
+        </div>
+      </div>
+      <!-- Luis F -->
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:24px; padding:32px; position:relative; text-align:center">
+        <div style="position:absolute; top:-20px; left:50%; transform:translateX(-50%); width:40px; height:40px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--dark)">“</div>
+        <p style="font-size:16px; font-style:italic; color:var(--white); line-height:1.6; margin-bottom:16px">"Ver cuánto estaba pagando en intereses fue un shock. Ahora tengo una meta real para salir de deudas."</p>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px">
+          <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--green), var(--green2)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--dark); font-size:12px">LF</div>
+          <div style="text-align:left">
+            <div style="font-weight:800; font-size:14px; color:var(--white)">Luis F.</div>
+            <div style="font-size:12px; color:var(--muted)">Miami, FL</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" id="precios">
+<section class="section" id="precios" onmouseover="if(!window.pricingViewed){fbq('track','ViewContent',{content_name:'Pricing Section'});window.pricingViewed=true}">
   <div class="wrap" style="text-align:center">
     <div class="eyebrow">Planes y Precios</div>
     <h2 class="sec-h2">Invierte en tu <span class="g">tranquilidad.</span></h2>
@@ -600,8 +645,10 @@ var planKey  = 'pro';
       var consent = localStorage.getItem('freedebt_consent');
       var purchaseValue = 19.99;
       if(consent){
-        var data = JSON.parse(consent);
-        if(data.plan === 'fam') purchaseValue = 29.99;
+        try {
+          var data = JSON.parse(consent);
+          if(data.plan === 'fam') purchaseValue = 29.99;
+        } catch(e) {}
       }
       fbq('track', 'Purchase', { currency: 'USD', value: purchaseValue });
     }
@@ -669,6 +716,7 @@ function accederGratis(){
 
 function abrirModal(nombre, tipo){
   planKey = tipo;
+  fbq('track', 'AddToCart', { content_name: 'Plan ' + planKey });
   var cargo = PRECIOS[tipo] || 19.99;
   function set(id, v){ var e = document.getElementById(id); if(e) e.textContent = v; }
   set('m-plan-label',   'Plan ' + (NOMBRES[tipo] || nombre));
