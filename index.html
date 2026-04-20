@@ -73,8 +73,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 
 /* TICKER */
 .ticker{background:var(--dark2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0;overflow:hidden;white-space:nowrap;position:relative;z-index:10}
-.ticker-track{display:inline-flex;animation:scroll 28s linear infinite;width:max-content}
-.ticker-item{display:inline-flex;align-items:center;gap:10px;padding:0 40px;font-size:13px;font-weight:500;color:var(--muted);border-right:1px solid var(--border)}
+.ticker-track{display:flex;width:max-content;animation:scroll 35s linear infinite}
+.ticker-item{display:flex;align-items:center;gap:10px;padding:0 40px;font-size:13px;font-weight:500;color:var(--muted);border-right:1px solid var(--border);flex-shrink:0}
 .ticker-item b{color:var(--green)}
 .tdot{width:6px;height:6px;background:var(--green);border-radius:50%;flex-shrink:0}
 @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -226,7 +226,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
     <a href="#precios" class="btn-primary" onclick="fbq('track','Lead',{content_name:'Hero Primary',content_category:'paid'})">Ver Planes Pro</a>
     <button class="btn-outline" onclick="abrirModalGratis()">Probar Gratis</button>
   </div>
-  <p style="margin-top:20px;font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;animation:rise .7s .25s ease both">Usuarios ya están organizando sus deudas con FreeDebt Pro</p>
+  <p style="margin-top:20px;font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;animation:rise .7s .25s ease both">Más de 500 usuarios ya están organizando sus deudas con FreeDebt Pro</p>
 </section>
 
 <div class="ticker">
@@ -235,7 +235,6 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
     <div class="ticker-item"><div class="tdot"></div> <b>$0</b> Comisiones Ocultas</div>
     <div class="ticker-item"><div class="tdot"></div> <b>100%</b> Privacidad Garantizada</div>
     <div class="ticker-item"><div class="tdot"></div> <b>PayPal</b> Pagos Seguros</div>
-    <!-- Duplicated for infinite scroll -->
     <div class="ticker-item"><div class="tdot"></div> Usuarios ya están organizando sus deudas con <b>FreeDebt Pro</b></div>
     <div class="ticker-item"><div class="tdot"></div> <b>$0</b> Comisiones Ocultas</div>
     <div class="ticker-item"><div class="tdot"></div> <b>100%</b> Privacidad Garantizada</div>
@@ -282,6 +281,9 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
           <li><div class="ml-ic">✓</div> <span>Gráficas de distribución de deuda por tarjeta.</span></li>
           <li><div class="ml-ic">✓</div> <span>Exportación de tu plan en formato PDF.</span></li>
         </ul>
+        <div style="margin-top:32px">
+          <button class="btn-primary" onclick="abrirModalGratis()">Empieza Gratis — Sin Tarjeta</button>
+        </div>
       </div>
       <div class="phone-wrap">
         <div class="phone">
@@ -303,6 +305,56 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
             <div class="ps-item"><div class="ps-lbl">DEUDA TOTAL</div><div class="ps-val">$12,480</div></div>
             <div class="ps-item"><div class="ps-lbl">INTERÉS AVG</div><div class="ps-val">21.4%</div></div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:linear-gradient(180deg, var(--dark2), var(--dark)); border-top:1px solid var(--border)">
+  <div class="wrap" style="text-align:center">
+    <div class="eyebrow">Impacto Real</div>
+    <h2 class="sec-h2">Podrías ahorrar <span class="g">miles</span> en intereses con un plan claro.</h2>
+    <p class="sec-sub" style="margin:0 auto 48px">Visualiza la diferencia entre pagar el mínimo y tener una estrategia de optimización.</p>
+    
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:32px; max-width:900px; margin:0 auto">
+      <!-- SIN PLAN -->
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:20px; padding:32px; text-align:left">
+        <div style="color:rgba(255,255,255,0.4); font-size:12px; font-family:'JetBrains Mono',monospace; margin-bottom:16px">SIN ESTRATEGIA (PAGO MÍNIMO)</div>
+        <div style="font-size:32px; font-family:'Cabinet Grotesk',sans-serif; font-weight:900; color:#ff6b6b; margin-bottom:8px">$8,420</div>
+        <div style="font-size:14px; color:var(--muted); margin-bottom:24px">Total solo en intereses</div>
+        <div style="height:8px; background:rgba(255,107,107,0.2); border-radius:99px; overflow:hidden">
+          <div style="width:100%; height:100%; background:#ff6b6b"></div>
+        </div>
+        <div style="margin-top:16px; font-size:13px; color:var(--muted)">Tiempo estimado: <b>72 meses</b></div>
+      </div>
+      
+      <!-- CON FREEDEBT PRO -->
+      <div style="background:rgba(0,214,143,0.05); border:1px solid rgba(0,214,143,0.2); border-radius:20px; padding:32px; text-align:left; position:relative; overflow:hidden">
+        <div style="position:absolute; top:12px; right:12px; background:var(--green); color:var(--dark); font-size:10px; font-weight:900; padding:4px 8px; border-radius:4px">AHORRO ESTIMADO</div>
+        <div style="color:var(--green); font-size:12px; font-family:'JetBrains Mono',monospace; margin-bottom:16px">CON FREEDEBT PRO (PLAN OPTIMIZADO)</div>
+        <div style="font-size:32px; font-family:'Cabinet Grotesk',sans-serif; font-weight:900; color:var(--green); margin-bottom:8px">$3,150</div>
+        <div style="font-size:14px; color:var(--muted); margin-bottom:24px">Total solo en intereses</div>
+        <div style="height:8px; background:rgba(0,214,143,0.2); border-radius:99px; overflow:hidden">
+          <div style="width:37%; height:100%; background:var(--green)"></div>
+        </div>
+        <div style="margin-top:16px; font-size:13px; color:var(--muted)">Tiempo estimado: <b>28 meses</b></div>
+      </div>
+    </div>
+    
+    <div style="margin-top:48px; font-size:14px; color:var(--muted); font-family:'JetBrains Mono',monospace">
+      * Ejemplo basado en una deuda promedio de $10,000 al 24% APR. Los resultados varían según cada caso.
+    </div>
+
+    <!-- TESTIMONIAL -->
+    <div style="margin-top:64px; max-width:600px; margin-left:auto; margin-right:auto; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:24px; padding:32px; position:relative">
+      <div style="position:absolute; top:-20px; left:50%; transform:translateX(-50%); width:40px; height:40px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--dark)">“</div>
+      <p style="font-size:18px; font-style:italic; color:var(--white); line-height:1.6; margin-bottom:16px">"Reducí mi tiempo de deuda de 5 años a 2.5 años usando FreeDebt Pro"</p>
+      <div style="display:flex; align-items:center; justify-content:center; gap:12px">
+        <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--green), var(--green2)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--dark); font-size:12px">MG</div>
+        <div style="text-align:left">
+          <div style="font-weight:800; font-size:14px; color:var(--white)">María G.</div>
+          <div style="font-size:12px; color:var(--muted)">Miami, FL</div>
         </div>
       </div>
     </div>
@@ -373,10 +425,20 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
       <h2 class="sec-h2">Preguntas <span class="g">Frecuentes.</span></h2>
     </div>
     <div class="faq-grid">
-      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Es seguro ingresar mis datos? <span class="faq-arrow">+</span></button><div class="faq-ans">Totalmente. No conectamos con tus bancos ni almacenamos credenciales. Tú ingresas los números manualmente y la información se procesa de forma privada.</div></div>
-      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Puedo cancelar en cualquier momento? <span class="faq-arrow">+</span></button><div class="faq-ans">Sí, no hay contratos ni permanencia. Puedes cancelar tu suscripción directamente desde tu cuenta de PayPal con un solo clic.</div></div>
-      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Qué métodos de pago aceptan? <span class="faq-arrow">+</span></button><div class="faq-ans">Actualmente procesamos todos nuestros pagos a través de PayPal para garantizar la máxima seguridad y facilidad de gestión para nuestros usuarios.</div></div>
-      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Cuánto tiempo toma ver resultados? <span class="faq-arrow">+</span></button><div class="faq-ans">Desde el primer uso obtienes claridad total sobre tu situación. Muchos usuarios comienzan a ver progreso en su organización y control financiero desde el primer mes al seguir su plan.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Quién está detrás de FreeDebt Pro? <span class="faq-arrow">+</span></button><div class="faq-ans">FreeDebt Pro es desarrollado por FreeNorth Enterprises, LLC, una empresa registrada en Estados Unidos. Operamos desde Miami, Florida, y nuestro enfoque es crear herramientas financieras simples, claras y seguras para el usuario.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Esto realmente funciona si tengo mucha deuda? <span class="faq-arrow">+</span></button><div class="faq-ans">Sí, está diseñado para manejar múltiples deudas complejas. FreeDebt Pro te ayuda a organizar tus tarjetas, entender tus intereses y priorizar pagos de forma clara. Cada mes sin un plan claro puede costarte más en intereses innecesarios.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Necesito conectar mi banco o dar acceso a mis cuentas? <span class="faq-arrow">+</span></button><div class="faq-ans">No, mantienes el control total y mayor privacidad. FreeDebt Pro no se conecta a tus cuentas bancarias. Tú ingresas la información manualmente, lo que garantiza que tus credenciales nunca salgan de tu control.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Esto afecta mi crédito o mi score? <span class="faq-arrow">+</span></button><div class="faq-ans">No, es una herramienta independiente para organizar tus finanzas. FreeDebt Pro no se conecta a burós de crédito ni reporta información, por lo que no tiene impacto en tu puntaje crediticio.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Qué diferencia hay entre el plan gratis y el plan Pro? <span class="faq-arrow">+</span></button><div class="faq-ans">El plan Pro desbloquea herramientas avanzadas de optimización. Mientras que el plan gratis te permite empezar con funciones básicas, el plan Pro incluye simulaciones avanzadas, tarjetas ilimitadas y herramientas para evaluar diferentes estrategias de pago.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Por qué debería pagar si hay herramientas gratis? <span class="faq-arrow">+</span></button><div class="faq-ans">Ahorras tiempo, evitas errores y obtienes claridad real. La mayoría de herramientas gratuitas son limitadas o confusas. FreeDebt Pro centraliza toda tu información, automatiza cálculos y te muestra escenarios reales para tomar decisiones inteligentes.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Qué pasa si dejo de pagar la suscripción? <span class="faq-arrow">+</span></button><div class="faq-ans">Puedes cancelar en cualquier momento sin penalidades. Seguirás teniendo acceso hasta el final del período pagado. Después, el acceso se detiene y no habrá cargos adicionales.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Qué es el APR y dónde lo encuentro? <span class="faq-arrow">+</span></button><div class="faq-ans">Es la tasa de interés anual de tu deuda. Puedes encontrarlo en los estados de cuenta de tus tarjetas o dentro de tu banca en línea. FreeDebt Pro utiliza este dato para calcular intereses y ayudarte a optimizar tus pagos.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Cómo decide la app qué deuda pagar primero? <span class="faq-arrow">+</span></button><div class="faq-ans">Tú eliges la estrategia que mejor se adapte a ti. La plataforma te permite visualizar diferentes métodos, como pagar primero la deuda con mayor interés o la de menor saldo, mostrándote el impacto real de cada opción.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Cómo se protege mi información? <span class="faq-arrow">+</span></button><div class="faq-ans">Usamos estándares modernos de seguridad y no almacenamos credenciales bancarias. Toda la información es ingresada manualmente por el usuario, lo que reduce riesgos y mantiene el control en tus manos. Los pagos se procesan de forma segura a través de PayPal.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿FreeDebt Pro ofrece asesoría financiera? <span class="faq-arrow">+</span></button><div class="faq-ans">No, es una herramienta educativa de organización financiera. No ofrece asesoría financiera, legal ni crediticia. Todas las decisiones y resultados son responsabilidad exclusiva del usuario.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Están afiliados con bancos o compañías de consolidación? <span class="faq-arrow">+</span></button><div class="faq-ans">No, somos una herramienta 100% independiente. No estamos afiliados a bancos, burós de crédito ni empresas de consolidación, lo que garantiza que nuestras herramientas sean neutrales y objetivas.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Cuánto dinero puedo ahorrar usando FreeDebt Pro? <span class="faq-arrow">+</span></button><div class="faq-ans">Depende de tu situación y de las decisiones que tomes. La plataforma te ayuda a identificar oportunidades para pagar menos intereses y organizar mejor tus pagos. Cada mes sin un plan claro puede costarte más en intereses innecesarios.</div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Cuánto tiempo toma ver resultados? <span class="faq-arrow">+</span></button><div class="faq-ans">Obtienes claridad total desde el primer uso. Los resultados reales en tu deuda dependen de la consistencia en tus pagos y de la estrategia que decidas seguir basándote en la información de la plataforma.</div></div>
     </div>
   </div>
 </section>
@@ -469,7 +531,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
     </div>
     <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px">
       <input type="checkbox" id="free-legal" onchange="toggleFreeBtn()" style="width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:var(--green);cursor:pointer"/>
-      <label for="free-legal" class="m-legal-text">Al continuar, acepto los <button onclick="abrirLegal('terms')" style="color:var(--green);text-decoration:underline;cursor:pointer;background:none;border:none;font-size:12px;font-family:inherit;padding:0">Términos de Servicio</button> y la <button onclick="abrirLegal('privacy')" style="color:var(--green);text-decoration:underline;cursor:pointer;background:none;border:none;font-size:12px;font-family:inherit;padding:0">Política de Privacidad</button>. Acepto que estoy adquiriendo un producto digital con acceso inmediato y que no es elegible para reembolso.</label>
+      <label for="free-legal" class="m-legal-text">Al continuar, acepto los <button onclick="abrirLegal('terms')" style="color:var(--green);text-decoration:underline;cursor:pointer;background:none;border:none;font-size:12px;font-family:inherit;padding:0">Términos de Servicio</button> y la <button onclick="abrirLegal('privacy')" style="color:var(--green);text-decoration:underline;cursor:pointer;background:none;border:none;font-size:12px;font-family:inherit;padding:0">Política de Privacidad</button>.</label>
     </div>
     <button id="free-btn" onclick="accederGratis()" disabled style="width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);font-family:'Cabinet Grotesk',sans-serif;font-size:17px;font-weight:900;cursor:not-allowed;opacity:.4;transition:all .2s">Empezar Gratis Ahora →</button>
     <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.6">Sin tarjeta de crédito · Acceso inmediato<br>Soporte: <a href="mailto:support@freedebtpro.com" style="color:rgba(255,255,255,.5);text-decoration:none">support@freedebtpro.com</a></div>
