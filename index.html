@@ -74,7 +74,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 /* TICKER */
 .ticker{background:var(--dark2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0;overflow:hidden;white-space:nowrap;position:relative;z-index:10}
 .ticker-track{display:flex;width:max-content;animation:scroll 35s linear infinite}
-.ticker-item{display:flex;align-items:center;gap:10px;padding:0 40px;font-size:13px;font-weight:500;color:var(--muted);border-right:1px solid var(--border);flex-shrink:0}
+.ticker-item{display:flex;align-items:center;gap:10px;padding:0 40px;font-size:13px;font-weight:500;color:var(--muted);border-right:1px solid var(--border);flex-shrink:0;margin:0}
 .ticker-item b{color:var(--green)}
 .tdot{width:6px;height:6px;background:var(--green);border-radius:50%;flex-shrink:0}
 @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -578,8 +578,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
 </div>
 
 <script>
-var PRODUCTION_DOMAIN = '';
-var GHL_WEBHOOK_URL   = '';
+var PRODUCTION_DOMAIN = 'https://freedebtpro.netlify.app';
+var GHL_WEBHOOK_URL   = 'https://services.leadconnectorhq.com/hooks/6J935821PF666054JNHMYXJQ';
 var APP_FILE     = 'freedebt-pro-espanol.html';
 var LANDING_FILE = 'index.html';
 
@@ -596,7 +596,14 @@ var planKey  = 'pro';
     if(new URLSearchParams(window.location.search).get('welcome') === '1'){
       var ws = document.getElementById('welcomeScreen');
       if(ws) ws.style.display = 'flex';
-      fbq('track', 'Purchase', { currency: 'USD', value: 19.99 });
+      
+      var consent = localStorage.getItem('freedebt_consent');
+      var purchaseValue = 19.99;
+      if(consent){
+        var data = JSON.parse(consent);
+        if(data.plan === 'fam') purchaseValue = 29.99;
+      }
+      fbq('track', 'Purchase', { currency: 'USD', value: purchaseValue });
     }
   } catch(e){}
 })();
