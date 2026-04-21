@@ -206,7 +206,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
     <a href="#como" class="nav-link">Cómo Funciona</a>
     <a href="#precios" class="nav-link">Planes</a>
     <a href="#faq" class="nav-link">Preguntas</a>
-    <button class="btn-nav" onclick="abrirModalGratis()">Empezar Gratis</button>
+    <button class="btn-nav" onclick="document.getElementById('ghl-form-section').scrollIntoView({behavior:'smooth'})">Empezar Gratis</button>
   </div>
 </nav>
 
@@ -224,15 +224,60 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
   </div>
   <div class="hero-btns">
     <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
-      <a href="#precios" class="btn-primary" onclick="fbq('track','Lead',{content_name:'Hero Primary',content_category:'paid'})">Ver Planes Pro</a>
-      <p style="font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace">Empieza hoy — toma menos de 5 minutos</p>
+      <a href="#ghl-form-section" class="btn-primary">Empezar Gratis Ahora</a>
+      <p style="font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace">Acceso inmediato — toma menos de 1 minuto</p>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
-      <button class="btn-outline" onclick="abrirModalGratis()">Probar Gratis</button>
+      <button class="btn-outline" onclick="document.getElementById('ghl-form-section').scrollIntoView({behavior:'smooth'})">Probar Gratis</button>
       <p style="font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace">Sin tarjeta en plan gratis</p>
     </div>
   </div>
   <p style="margin-top:20px;font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;animation:rise .7s .25s ease both">Más de 500 usuarios ya están organizando sus deudas con FreeDebt Pro • Cancela cuando quieras</p>
+</section>
+
+<!-- GHL FORM SECTION -->
+<section id="ghl-form-section" style="padding:60px 24px; background:var(--dark2); border-top:1px solid var(--border); border-bottom:1px solid var(--border)">
+  <div style="max-width:600px; margin:0 auto; text-align:center">
+    <div class="eyebrow">Acceso Inmediato</div>
+    <h2 class="sec-h2" style="font-size:32px; margin-bottom:12px">Empieza tu <span class="g">Plan Gratis</span></h2>
+    <p style="color:var(--muted); font-size:15px; margin-bottom:32px">Ingresa tus datos para acceder a la plataforma y organizar tus deudas hoy mismo.</p>
+    
+    <p style="font-size:13px;color:var(--green);margin-bottom:10px">
+      ⚡ Solo toma 30 segundos — acceso inmediato después
+    </p>
+
+    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:16px; padding:10px; min-height:700px">
+      <iframe
+          src="https://api.leadconnectorhq.com/widget/form/AxEfvsjiThwjxIye6004"
+          style="width:100%;min-height:700px;border:none;border-radius:4px"
+          id="inline-AxEfvsjiThwjxIye6004" 
+          data-layout="{'id':'INLINE'}"
+          data-trigger-type="alwaysShow"
+          data-activation-type="alwaysActivated"
+          data-deactivation-type="neverDeactivate"
+          data-form-id="AxEfvsjiThwjxIye6004"
+          title="1. FreeDebt Leads"
+              >
+      </iframe>
+      <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+      <script>
+      (function() {
+        let leadTracked = false;
+        window.addEventListener("message", function(event) {
+          if (!leadTracked && event.data && (
+            event.data.type === "form_submission" ||
+            event.data.event === "formSubmitted"
+          )) {
+            fbq('track', 'Lead', {
+              content_name: 'GHL Form Lead'
+            });
+            leadTracked = true;
+          }
+        });
+      })();
+      </script>
+    </div>
+  </div>
 </section>
 
 <div class="ticker">
@@ -288,7 +333,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
           <li><div class="ml-ic">✓</div> <span>Exportación de tu plan en formato PDF.</span></li>
         </ul>
         <div style="margin-top:32px">
-          <button class="btn-primary" onclick="abrirModalGratis()">Empieza Gratis — Sin Tarjeta</button>
+          <button class="btn-primary" onclick="document.getElementById('ghl-form-section').scrollIntoView({behavior:'smooth'})">Empieza Gratis — Sin Tarjeta</button>
         </div>
       </div>
       <div class="phone-wrap">
@@ -424,7 +469,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
           <li><span class="p-ic">✓</span> Acceso Web</li>
           <li style="opacity:.4"><span class="p-ic">✕</span> Simulador Pro</li>
         </ul>
-        <button class="btn-price" onclick="abrirModalGratis()">Empezar Gratis</button>
+        <button class="btn-price" onclick="document.getElementById('ghl-form-section').scrollIntoView({behavior:'smooth'})">Empezar Gratis</button>
         <p style="margin-top:12px;font-size:11px;color:var(--muted)">Acceso inmediato • Sin tarjeta</p>
       </div>
       
@@ -492,9 +537,9 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
   <div class="cta-glow"></div>
   <h2 class="cta-h2">Empieza a tener<br>un plan <span class="g">claro.</span></h2>
   <p style="font-size:18px;color:var(--muted);margin-bottom:16px;position:relative">Organiza tus tarjetas, entiende tu situación real y toma el control.</p>
-  <p style="font-size:14px;color:rgba(0,214,143,.7);margin-bottom:32px;font-family:'JetBrains Mono',monospace;position:relative">⚡ Empieza hoy y ve tu plan en menos de 5 minutos</p>
+  <p style="font-size:14px;color:rgba(0,214,143,.7);margin-bottom:32px;font-family:'JetBrains Mono',monospace;position:relative">⚡ Empieza hoy y ve tu plan en menos de 1 minuto</p>
   <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:14px;position:relative">
-    <a class="btn-primary" href="#precios" onclick="fbq('track','Lead',{content_name:'CTA Section',content_category:'free'})">Comenzar Gratis — Sin Tarjeta de Crédito</a>
+    <button class="btn-primary" onclick="document.getElementById('ghl-form-section').scrollIntoView({behavior:'smooth'})">Comenzar Gratis — Sin Tarjeta de Crédito</button>
   </div>
   <div style="font-size:13px;color:rgba(255,179,71,.6);margin-top:12px;font-family:'JetBrains Mono',monospace;position:relative">Cada mes sin plan te cuesta más en intereses</div>
   <div style="font-size:13px;color:var(--muted);margin-top:8px">Sin contratos · Cancela desde tu cuenta de PayPal · Herramienta educativa de organización financiera</div>
@@ -563,25 +608,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
   <p style="margin-top:20px;font-size:12px;color:rgba(255,255,255,.3)">¿Problemas? <a href="mailto:support@freedebtpro.com" style="color:rgba(255,255,255,.5);text-decoration:none">support@freedebtpro.com</a></p>
 </div>
 
-<!-- FREE PLAN MODAL -->
-<div class="modal-overlay" id="freeModal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="cerrarFreeModal()">×</button>
-    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,214,143,.1);border:1px solid rgba(0,214,143,.2);color:var(--green);border-radius:99px;padding:6px 16px;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:18px">🎁 Plan Básico — Gratis</div>
-    <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:24px;font-weight:900;margin-bottom:8px">Accede a FreeDebt Pro</div>
-    <div style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5">Ingresa tu correo para continuar y acceder a la plataforma.</div>
-    <div style="margin-bottom:16px">
-      <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px">Correo electrónico <span style="color:var(--green)">*</span></label>
-      <input id="free-email" type="email" class="m-input" placeholder="tu@correo.com" oninput="toggleFreeBtn()"/>
-    </div>
-    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px">
-      <input type="checkbox" id="free-legal" onchange="toggleFreeBtn()" style="width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:var(--green);cursor:pointer"/>
-      <label for="free-legal" class="m-legal-text">Al continuar, acepto los <button onclick="abrirLegal('terms')" style="color:var(--green);text-decoration:underline;cursor:pointer;background:none;border:none;font-size:12px;font-family:inherit;padding:0">Términos de Servicio</button> y la <button onclick="abrirLegal('privacy')" style="color:var(--green);text-decoration:underline;cursor:pointer;background:none;border:none;font-size:12px;font-family:inherit;padding:0">Política de Privacidad</button>.</label>
-    </div>
-    <button id="free-btn" onclick="accederGratis()" disabled style="width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);font-family:'Cabinet Grotesk',sans-serif;font-size:17px;font-weight:900;cursor:not-allowed;opacity:.4;transition:all .2s">Empezar Gratis Ahora →</button>
-    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.6">Sin tarjeta de crédito · Acceso inmediato<br>Soporte: <a href="mailto:support@freedebtpro.com" style="color:rgba(255,255,255,.5);text-decoration:none">support@freedebtpro.com</a></div>
-  </div>
-</div>
+<!-- Free Plan Modal Removed - Lead capture handled by GHL iframe -->
 
 <!-- SUBSCRIPTION MODAL -->
 <div class="modal-overlay" id="subModal">
@@ -624,7 +651,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
 
 <script>
 var PRODUCTION_DOMAIN = 'https://freedebtpro.netlify.app';
-var GHL_WEBHOOK_URL   = 'https://services.leadconnectorhq.com/hooks/6J935821PF666054JNHMYXJQ';
+// Lead capture handled by GHL iframe
 var APP_FILE     = 'freedebt-pro-espanol.html';
 var LANDING_FILE = 'index.html';
 
@@ -655,64 +682,7 @@ var planKey  = 'pro';
   } catch(e){}
 })();
 
-function abrirModalGratis(){
-  var em  = document.getElementById('free-email');
-  var cb  = document.getElementById('free-legal');
-  var btn = document.getElementById('free-btn');
-  if(em)  em.value = '';
-  if(cb)  cb.checked = false;
-  if(btn){ btn.disabled = true; btn.style.opacity = '.4'; btn.style.cursor = 'not-allowed'; btn.textContent = 'Empezar Gratis Ahora →'; }
-  var m = document.getElementById('freeModal');
-  if(m) m.classList.add('open');
-}
 
-function cerrarFreeModal(){
-  var m = document.getElementById('freeModal');
-  if(m) m.classList.remove('open');
-}
-
-function toggleFreeBtn(){
-  var em  = document.getElementById('free-email');
-  var cb  = document.getElementById('free-legal');
-  var btn = document.getElementById('free-btn');
-  if(!em || !btn || !cb) return;
-  var ok = em.value.length > 3 && em.value.indexOf('@') > 0 && cb.checked;
-  btn.disabled      = !ok;
-  btn.style.opacity = ok ? '1' : '.4';
-  btn.style.cursor  = ok ? 'pointer' : 'not-allowed';
-}
-
-function accederGratis(){
-  var em = document.getElementById('free-email');
-  var cb = document.getElementById('free-legal');
-  if(!em || em.value.indexOf('@') < 1 || !cb || !cb.checked) return;
-  var email = em.value.trim();
-  var btn   = document.getElementById('free-btn');
-  if(btn){ btn.textContent = 'Un momento...'; btn.disabled = true; btn.style.opacity = '.7'; }
-
-  function goToApp(){
-    fbq('track', 'Lead', { content_name: 'Plan Basico', content_category: 'free' });
-    cerrarFreeModal();
-    window.location.href = APP_FILE;
-  }
-
-  if(GHL_WEBHOOK_URL && GHL_WEBHOOK_URL.length > 20){
-    fetch(GHL_WEBHOOK_URL, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email:     email,
-        tags:      ['freedebt-basico', 'landing-page'],
-        source:    'FreeDebt Pro Plan Basico',
-        plan:      'basico',
-        timestamp: new Date().toISOString(),
-        acceptedTerms: true
-      })
-    }).then(function(){ goToApp(); }).catch(function(){ goToApp(); });
-  } else {
-    goToApp();
-  }
-}
 
 function abrirModal(nombre, tipo){
   planKey = tipo;
@@ -782,16 +752,22 @@ function irAPayPal(){
     }
   }
 
-  if(GHL_WEBHOOK_URL && GHL_WEBHOOK_URL.length > 20){
-    fetch(GHL_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(consentData)
-    }).then(function(){ proceedToPayPal(); }).catch(function(){ proceedToPayPal(); });
-  } else {
-    proceedToPayPal();
-  }
+  proceedToPayPal();
 }
+
+let formViewed = false;
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !formViewed) {
+      fbq('track', 'ViewContent', {
+        content_name: 'Form Viewed'
+      });
+      formViewed = true;
+    }
+  });
+}, { threshold: 0.5 });
+const formSection = document.getElementById('ghl-form-section');
+if(formSection) observer.observe(formSection);
 
 function cerrarModal(){
   var m = document.getElementById('subModal');
@@ -869,10 +845,10 @@ function cerrarLegal(){
   if(m) m.classList.remove('open');
 }
 
-document.addEventListener('DOMContentLoaded', function(){
-  [['subModal', cerrarModal], ['freeModal', cerrarFreeModal], ['legalModal', cerrarLegal]].forEach(function(p){
-    var el = document.getElementById(p[0]);
-    if(el) el.addEventListener('click', function(e){ if(e.target === el) p[1](); });
+window.addEventListener('click', function(e){
+  [['subModal', cerrarModal], ['legalModal', cerrarLegal]].forEach(function(m){
+    var el = document.getElementById(m[0]);
+    if(el && el.classList.contains('open') && e.target === el) m[1]();
   });
 });
 
