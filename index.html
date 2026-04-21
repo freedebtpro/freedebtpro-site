@@ -246,10 +246,27 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:80px 0 
       ⚡ Solo toma 30 segundos — acceso inmediato después
     </p>
 
-    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:16px; padding:10px; min-height:700px">
+    <style>
+      #ghl-form-wrapper { min-height: 320px; }
+      #inline-AxEfvsjiThwjxIye6004 {
+        width: 100%;
+        height: 320px;
+        min-height: 320px;
+        border: none;
+        border-radius: 4px;
+        display: block;
+      }
+      @media (max-width: 640px) {
+        #ghl-form-wrapper { min-height: 360px; }
+        #inline-AxEfvsjiThwjxIye6004 {
+          height: 360px;
+          min-height: 360px;
+        }
+      }
+    </style>
+    <div id="ghl-form-wrapper" style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:16px; padding:10px;">
       <iframe
           src="https://api.leadconnectorhq.com/widget/form/AxEfvsjiThwjxIye6004"
-          style="width:100%;min-height:700px;border:none;border-radius:4px"
           id="inline-AxEfvsjiThwjxIye6004" 
           data-layout="{'id':'INLINE'}"
           data-trigger-type="alwaysShow"
