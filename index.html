@@ -765,7 +765,7 @@ var PRODUCTION_DOMAIN = '';
 // Set your GoHighLevel webhook URL to capture free plan leads
 // Get from GHL > Settings > Integrations > Webhooks > Create
 // Example: 'https://hooks.leadconnectorhq.com/hooks/XXXXXXXX'
-var GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprlXEMfdl0/webhook-trigger/c6ae2e03-8c08-4385-b2a7-0f50f65e10f4';
+var https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899 = 'https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprlXEMfdl0/webhook-trigger/c6ae2e03-8c08-4385-b2a7-0f50f65e10f4';
 // ──────────────────────────────────────────────────────────────
 
 var APP_FILE     = 'freedebt-pro-espanol.html';
@@ -852,7 +852,7 @@ function accederGratis() {
     window.location.href = APP_FILE;
   }
 
-  fetch(GHL_WEBHOOK_URL, {
+  fetch(https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: email, firstName: name, lastName: lastname, phone: phone, plan: 'gratis', source: 'FreeDebt Pro Landing Page' })
@@ -920,7 +920,7 @@ function irAPayPal() {
   var phone    = ph ? ph.value.trim() : '';
 
   // Send lead to GHL before going to PayPal
-  fetch(GHL_WEBHOOK_URL, {
+  fetch(https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: email, firstName: name, lastName: lastname, phone: phone, plan: planKey, source: 'FreeDebt Pro - Plan ' + planKey })
@@ -1229,7 +1229,7 @@ function calcFormSubmit(e){
 
   if(typeof fbq === 'function') fbq('track', 'Lead', {content_name:'Guardar Plan', content_category:'email_capture'});
 
-  fetch(GHL_WEBHOOK_URL, {
+  fetch(https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: email, firstName: name, lastName: lastname, phone: phone, plan: 'gratis', source: 'FreeDebt Pro Calculadora' })
