@@ -852,7 +852,7 @@ function accederGratis() {
     window.location.href = APP_FILE;
   }
 
-  fetch(https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899, {
+  fetch('https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: email, firstName: name, lastName: lastname, phone: phone, plan: 'gratis', source: 'FreeDebt Pro Landing Page' })
@@ -920,7 +920,7 @@ function irAPayPal() {
   var phone    = ph ? ph.value.trim() : '';
 
   // Send lead to GHL before going to PayPal
-  fetch(https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899, {
+  fetch('https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: email, firstName: name, lastName: lastname, phone: phone, plan: planKey, source: 'FreeDebt Pro - Plan ' + planKey })
