@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>-
 <html lang="es">
 <head>
 <!-- Meta Pixel — ID: 1637117803989164 -->
@@ -208,11 +208,6 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
 .testi-loc{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
 @media(max-width:768px){.testi-grid{grid-template-columns:1fr!important;max-width:480px!important}}
 
-
-.calc-plazo-btn{background:rgba(255,255,255,.05);border:1.5px solid var(--border2);color:var(--muted);border-radius:99px;padding:8px 18px;font-family:'JetBrains Mono',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
-.calc-plazo-btn:hover{border-color:rgba(255,255,255,.3);color:var(--white)}
-.calc-plazo-active{background:rgba(0,214,143,.12)!important;border-color:var(--green)!important;color:var(--green)!important}
-
 </style>
 </head>
 <body>
@@ -236,7 +231,38 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
   <div class="hero-chip"><div class="chip-dot"></div> Herramienta de Organización Financiera</div>
   <h1 class="hero-h1">Si pagas solo el mínimo, tus tarjetas te siguen costando más.<br><span class="h1-grad">Ve tu situación completa y empieza a pagar menos intereses desde hoy.</span></h1>
   <p class="hero-sub">Descubre cuánto estás perdiendo en intereses y crea un plan claro para salir más rápido — sin bancos, sin complicaciones.</p>
-  <div class="hero-btns" style="justify-content:center;margin-top:0!important;margin-bottom:0!important"><button class="btn-primary" onclick="fbq('track','Lead',{content_name:'Hero CTA',content_category:'free'});document.getElementById('start').scrollIntoView({behavior:'smooth'});">Ver mi plan GRATIS →</button></div>
+  <div class="hero-btns" style="justify-content:center;margin-top:0!important;margin-bottom:0!important"><<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const btns = document.querySelectorAll("button");
+
+  btns.forEach(btn => {
+    if (btn.innerText.includes("Guardar mi plan")) {
+
+      btn.addEventListener("click", function() {
+
+        const emailInput = document.querySelector("input[type='email']");
+        const email = emailInput ? emailInput.value : "";
+
+        fetch("https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdI0/webhook-trigger/ad025b6a-69ea-4371-8bbb-276fd5", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+           body: JSON.stringify({
+             email: email,
+             source: "FreeDebtPro"
+          })                                                                                                                                                                                                                    
+        });
+
+        console.log("ENVIADO:", email);
+      });
+
+    }
+  });
+
+});
+</script> class="btn-primary" onclick="fbq('track','Lead',{content_name:'Hero CTA',content_category:'free'});abrirModalGratis()">Ver mi plan GRATIS →</button></div>
   <div style="margin-top:14px;font-size:12px;color:rgba(255,255,255,0.35);font-family:'JetBrains Mono',monospace;animation:rise 0.7s 0.28s ease both;">Sin contratos · Cancela desde tu cuenta de PayPal</div>
 </section>
 
@@ -256,118 +282,6 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
     <div class="ticker-item"><div class="dot"></div><span>Seguimiento de pagos <b>mes a mes</b></span></div>
   </div>
 </div>
-
-
-<!-- CALCULADORA #start -->
-<div id="start" style="background:var(--dark2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 24px;">
-<div style="max-width:680px;margin:0 auto;">
-  <div style="text-align:center;margin-bottom:40px;">
-    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.2);color:var(--green);border-radius:99px;padding:6px 16px;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;">🧮 Empieza tu cálculo</div>
-    <h2 style="font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-1px;margin-bottom:12px;">Calcula tu primera tarjeta gratis</h2>
-    <p style="font-size:16px;color:var(--muted);line-height:1.65;max-width:520px;margin:0 auto;">Agrega una tarjeta y descubre cuánto tendrías que pagar al mes para salir más rápido y ahorrar intereses.</p>
-  </div>
-  <div style="background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:20px;padding:32px;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-      <div style="grid-column:1/-1;">
-        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Nombre de la tarjeta</label>
-        <input id="calc-nombre" type="text" placeholder="Ej. Visa Platinum" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
-      </div>
-      <div>
-        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Límite de crédito ($)</label>
-        <input id="calc-limite" type="number" placeholder="Ej. 5000" min="0" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'" oninput="calcUpdate()"/>
-      </div>
-      <div>
-        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Balance actual ($)</label>
-        <input id="calc-balance" type="number" placeholder="Ej. 3200" min="0" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'" oninput="calcUpdate()"/>
-      </div>
-      <div>
-        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">APR / Interés anual (%)</label>
-        <input id="calc-apr" type="number" placeholder="Ej. 24.99" min="0" max="100" step="0.01" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'" oninput="calcUpdate()"/>
-      </div>
-      <div>
-        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Pago mensual actual ($)</label>
-        <input id="calc-pago" type="number" placeholder="Ej. 150" min="0" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'" oninput="calcUpdate()"/>
-      </div>
-    </div>
-    <!-- Plazo -->
-    <div style="margin-bottom:24px;">
-      <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:10px;">¿En cuántos meses quieres pagarlo?</label>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button onclick="calcSetPlazo(12,this)" class="calc-plazo-btn">12 meses</button>
-        <button onclick="calcSetPlazo(24,this)" class="calc-plazo-btn">24 meses</button>
-        <button onclick="calcSetPlazo(36,this)" class="calc-plazo-btn calc-plazo-active">36 meses</button>
-        <button onclick="calcSetPlazo(48,this)" class="calc-plazo-btn">48 meses</button>
-        <button onclick="calcSetPlazo(60,this)" class="calc-plazo-btn">60 meses</button>
-      </div>
-    </div>
-    <!-- Results -->
-    <div id="calc-results" style="display:none;">
-      <div style="height:1px;background:var(--border);margin-bottom:24px;"></div>
-      <div id="calc-msg" style="background:rgba(0,214,143,.07);border:1px solid rgba(0,214,143,.2);border-radius:14px;padding:20px 22px;margin-bottom:20px;font-family:'Cabinet Grotesk',sans-serif;font-size:17px;font-weight:800;color:var(--white);line-height:1.45;text-align:center;"></div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;">
-        <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
-          <div style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Pago mensual necesario</div>
-          <div id="calc-pago-nuevo" style="font-family:'Cabinet Grotesk',sans-serif;font-size:24px;font-weight:900;color:var(--green);"></div>
-        </div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
-          <div style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Más que tu pago actual</div>
-          <div id="calc-diferencia" style="font-family:'Cabinet Grotesk',sans-serif;font-size:24px;font-weight:900;color:var(--amber);"></div>
-        </div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
-          <div style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Interés si sigues igual</div>
-          <div id="calc-interes-actual" style="font-family:'Cabinet Grotesk',sans-serif;font-size:24px;font-weight:900;color:#f87171;"></div>
-        </div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
-          <div style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Interés con nuevo plan</div>
-          <div id="calc-interes-nuevo" style="font-family:'Cabinet Grotesk',sans-serif;font-size:24px;font-weight:900;color:var(--green);"></div>
-        </div>
-      </div>
-      <!-- Ahorro -->
-      <div style="background:linear-gradient(135deg,rgba(0,214,143,.12),rgba(0,214,143,.05));border:1px solid rgba(0,214,143,.25);border-radius:14px;padding:18px 22px;text-align:center;margin-bottom:24px;">
-        <div style="font-size:11px;color:var(--green);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">💰 AHORRO ESTIMADO EN INTERESES</div>
-        <div id="calc-ahorro" style="font-family:'Cabinet Grotesk',sans-serif;font-size:36px;font-weight:900;color:var(--green);"></div>
-      </div>
-      <!-- Upsell -->
-      <div style="background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:14px;padding:20px 22px;margin-bottom:20px;text-align:center;">
-        <p style="font-size:14px;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:16px;">📊 Este cálculo es para <strong style="color:var(--white)">una tarjeta</strong>. Para organizar tarjetas ilimitadas y ver tu plan completo, activa Pro.</p>
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-          <button onclick="calcIrPayPal('pro')" style="background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);border:none;border-radius:12px;padding:12px 22px;font-family:'Cabinet Grotesk',sans-serif;font-size:15px;font-weight:800;cursor:pointer;">Activar Pro — $19.99/mes →</button>
-          <button onclick="calcIrPayPal('familiar')" style="background:transparent;color:var(--white);border:1.5px solid var(--border2);border-radius:12px;padding:12px 22px;font-family:'Cabinet Grotesk',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Activar Familiar — $29.99/mes →</button>
-        </div>
-      </div>
-      <!-- Email — Netlify Form → GHL via Zapier -->
-      <div style="border:1px solid var(--border);border-radius:14px;padding:20px 22px;text-align:center;">
-        <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:17px;font-weight:800;margin-bottom:6px;">Guarda tu plan gratis</div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Ingresa tus datos y te contactamos con tu plan personalizado.</p>
-        <form name="freedebt-leads" method="POST" netlify="true" data-netlify="true"
-          onsubmit="calcFormSubmit(event)"
-          style="display:flex;gap:10px;max-width:420px;margin:0 auto;flex-wrap:wrap;">
-          <input type="hidden" name="form-name" value="freedebt-leads"/>
-          <input name="firstname" id="calc-name" type="text" placeholder="Tu nombre" required
-            style="flex:1;min-width:180px;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;width:100%;"
-            onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
-          <input name="lastname" id="calc-lastname" type="text" placeholder="Tu apellido" required
-            style="flex:1;min-width:180px;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;width:100%;"
-            onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
-          <input name="phone" id="calc-phone" type="tel" placeholder="Tu teléfono (ej: 305-555-1234)" required
-            style="flex:1;min-width:180px;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;width:100%;"
-            onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
-          <input name="email" id="calc-email" type="email" placeholder="Tu correo electrónico" required
-            style="flex:1;min-width:180px;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;width:100%;"
-            onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
-          <button type="submit" style="background:var(--green);color:var(--dark);border:none;border-radius:10px;padding:11px 20px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap;width:100%;">Guardar mi plan</button>
-        </form>
-        <div id="calc-email-msg" style="font-size:12px;color:var(--green);margin-top:10px;display:none;">✅ ¡Tu plan ha sido enviado a tu correo. Te contactamos pronto!</div>
-        <p style="font-size:11px;color:rgba(255,255,255,.3);margin-top:8px;font-family:'JetBrains Mono',monospace;">🔒 No spam. No compartimos tu información.</p>
-      </div>
-    </div><!-- end results -->
-    <!-- Empty state -->
-    <div id="calc-empty" style="text-align:center;padding:12px 0;color:var(--muted);font-size:13px;font-family:'JetBrains Mono',monospace;">↑ Ingresa el balance, APR y pago mensual para ver tu plan</div>
-  </div>
-  <p style="font-size:11px;color:rgba(255,255,255,.3);text-align:center;margin-top:16px;font-family:'JetBrains Mono',monospace;line-height:1.6;">⚠️ Estimaciones educativas. No constituyen asesoría financiera.</p>
-</div>
-</div>
-<!-- END CALCULADORA -->
 
 <div id="como">
 <div class="section wrap">
@@ -576,10 +490,6 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
   <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Cómo se protege mi información? <span class="faq-arrow">+</span></button><div class="faq-ans">Protegemos tu información mediante medidas de seguridad razonables. Los datos financieros pueden procesarse localmente en tu dispositivo. No vendemos tu información personal. Pagos procesados por PayPal.</div></div>
   <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿FreeDebt Pro ofrece asesoría financiera? <span class="faq-arrow">+</span></button><div class="faq-ans">No. FreeDebt Pro es una herramienta de organización y educación financiera únicamente. No ofrecemos asesoría financiera, legal ni de crédito. Para asesoría personalizada, consulta con un profesional certificado.</div></div>
   <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Están afiliados con bancos o compañías de consolidación? <span class="faq-arrow">+</span></button><div class="faq-ans">No. FreeDebt Pro no está afiliado con ningún banco, institución financiera, buró de crédito ni compañía de consolidación de deudas. Somos una herramienta educativa independiente.</div></div>
-  <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Cuánto dinero puedo ahorrar usando FreeDebt Pro? <span class="faq-arrow">+</span></button><div class="faq-ans">Depende de tu balance, APR, pagos mensuales y consistencia. FreeDebt Pro muestra estimaciones educativas para que veas cómo diferentes pagos pueden afectar intereses y tiempo de pago. No garantiza ahorros específicos.</div></div>
-  <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Cuánto tiempo toma ver resultados? <span class="faq-arrow">+</span></button><div class="faq-ans">Puedes ver una proyección inicial en minutos después de ingresar tus datos. Los resultados reales dependen de tus pagos, intereses, cambios de balance y disciplina mensual.</div></div>
-  <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">¿Cuánta deuda necesito para que esto valga la pena? <span class="faq-arrow">+</span></button><div class="faq-ans">No necesitas una cantidad exacta. Si tienes una o más tarjetas con balance y estás pagando intereses, la herramienta puede ayudarte a entender mejor tu situación y organizar un plan más claro.</div></div>
-</div></div>
 </div>
 </div>
 
@@ -608,7 +518,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
         <div class="footer-tagline">Organiza tu deuda con claridad y toma mejores decisiones financieras.</div>
         <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.3);font-family:'JetBrains Mono',monospace;line-height:1.6;">
           FREENORTH ENTERPRISES, LLC<br>
-          Miami, Florida, USA<br>
+          Miramar, Florida, USA<br>
           📧 <a href="mailto:support@freedebtpro.com" style="color:rgba(255,255,255,0.5);text-decoration:none;">support@freedebtpro.com</a>
         </div>
       </div>
@@ -665,21 +575,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
     <button class="modal-close" onclick="cerrarFreeModal()">×</button>
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,214,143,0.1);border:1px solid rgba(0,214,143,0.2);color:var(--green);border-radius:99px;padding:6px 16px;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:18px;">🎁 Plan Básico — Gratis</div>
     <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:24px;font-weight:900;margin-bottom:8px;">Accede a FreeDebt Pro</div>
-    <div style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5;">Ingresa tus datos para continuar. Te enviaremos el enlace de acceso.</div>
-    <div style="display:flex;gap:10px;margin-bottom:12px;">
-      <div style="flex:1;">
-        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Nombre <span style="color:var(--green);">*</span></label>
-        <input id="free-name" type="text" class="m-input" placeholder="Tu nombre" oninput="toggleFreeBtn()"/>
-      </div>
-      <div style="flex:1;">
-        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Apellido <span style="color:var(--green);">*</span></label>
-        <input id="free-lastname" type="text" class="m-input" placeholder="Tu apellido" oninput="toggleFreeBtn()"/>
-      </div>
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Teléfono <span style="color:var(--green);">*</span></label>
-      <input id="free-phone" type="tel" class="m-input" placeholder="305-555-1234" oninput="toggleFreeBtn()"/>
-    </div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5;">Ingresa tu correo para continuar. Te enviaremos el enlace de acceso.</div>
     <div style="margin-bottom:16px;">
       <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Correo electrónico <span style="color:var(--green);">*</span></label>
       <input id="free-email" type="email" class="m-input" placeholder="tu@correo.com" oninput="toggleFreeBtn()"/>
@@ -698,28 +594,14 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
     <button class="modal-close" onclick="cerrarModal()">×</button>
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,214,143,0.1);border:1px solid rgba(0,214,143,0.2);color:var(--green);border-radius:99px;padding:6px 16px;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:18px;">💳 <span id="m-plan-label">Plan Pro</span></div>
     <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:26px;font-weight:900;margin-bottom:8px;">Continuar al pago</div>
-    <div style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5;">Completa tus datos para continuar al pago.</div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5;">Serás redirigido a PayPal para completar tu suscripción de forma segura.</div>
     <div style="background:rgba(0,214,143,0.06);border:1px solid rgba(0,214,143,0.15);border-radius:14px;padding:16px;margin-bottom:16px;">
       <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;"><span style="color:var(--muted);">Plan</span><span id="m-plan-name">Pro</span></div>
       <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;"><span style="color:var(--muted);">Facturación</span><span id="m-billing-type">Mensual</span></div>
       <div style="display:flex;justify-content:space-between;font-weight:700;font-size:16px;padding-top:8px;border-top:1px solid rgba(0,214,143,0.15);"><span style="color:var(--muted);">Cargo hoy</span><span style="color:var(--green);" id="m-charge">$19.99</span></div>
     </div>
-    <div style="display:flex;gap:10px;margin-bottom:12px;">
-      <div style="flex:1;">
-        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Nombre <span style="color:var(--green);">*</span></label>
-        <input id="m-name" type="text" class="m-input" placeholder="Tu nombre" oninput="togglePayBtn()"/>
-      </div>
-      <div style="flex:1;">
-        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Apellido <span style="color:var(--green);">*</span></label>
-        <input id="m-lastname" type="text" class="m-input" placeholder="Tu apellido" oninput="togglePayBtn()"/>
-      </div>
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Teléfono <span style="color:var(--green);">*</span></label>
-      <input id="m-phone" type="tel" class="m-input" placeholder="305-555-1234" oninput="togglePayBtn()"/>
-    </div>
     <div style="margin-bottom:14px;">
-      <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Correo electrónico <span style="color:var(--green);">*</span></label>
+      <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Correo electrónico (requerido) <span style="color:var(--green);">*</span></label>
       <input id="m-email" type="email" class="m-input" placeholder="tu@correo.com" oninput="togglePayBtn()"/>
       <div style="font-size:11px;color:rgba(0,214,143,0.7);margin-top:4px;">Usamos tu correo para enviarte las instrucciones de acceso y confirmación de pago.</div>
     </div>
@@ -742,7 +624,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
   <div class="legal-box">
     <button class="legal-close" onclick="cerrarLegal()">×</button>
     <div id="l-title" style="font-family:'Cabinet Grotesk',sans-serif;font-size:22px;font-weight:900;margin-bottom:4px;padding-right:40px;"></div>
-    <div style="font-size:11px;color:var(--green);font-family:'JetBrains Mono',monospace;margin-bottom:24px;">FREENORTH ENTERPRISES, LLC · Miami, Florida, USA · Effective Date: April 2026</div>
+    <div style="font-size:11px;color:var(--green);font-family:'JetBrains Mono',monospace;margin-bottom:24px;">FREENORTH ENTERPRISES, LLC · Miramar, Florida, USA · Effective Date: April 2026</div>
     <div class="legal-body" id="l-body"></div>
   </div>
 </div>
@@ -750,7 +632,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
 <script>
 // ════════════════════════════════════════════════════════════════
 // FREEDEBT PRO — FREENORTH ENTERPRISES, LLC
-// Miami, Florida, USA · support@freedebtpro.com
+// Miramar, Florida, USA · support@freedebtpro.com
 //
 // FILES (must match Netlify upload names exactly):
 //   freedebt-pro-landing-espanol.html  ← this file
@@ -765,7 +647,7 @@ var PRODUCTION_DOMAIN = '';
 // Set your GoHighLevel webhook URL to capture free plan leads
 // Get from GHL > Settings > Integrations > Webhooks > Create
 // Example: 'https://hooks.leadconnectorhq.com/hooks/XXXXXXXX'
-var https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899 = 'https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprlXEMfdl0/webhook-trigger/c6ae2e03-8c08-4385-b2a7-0f50f65e10f4';
+var GHL_WEBHOOK_URL = '';
 // ──────────────────────────────────────────────────────────────
 
 var APP_FILE     = 'freedebt-pro-espanol.html';
@@ -803,10 +685,6 @@ var planKey = 'pro';
 function abrirModalGratis() {
   var em = document.getElementById('free-email');
   if(em) em.value = '';
-  var nm = document.getElementById('free-name');
-  if(nm) nm.value = '';
-  var ph = document.getElementById('free-phone');
-  if(ph) ph.value = '';
   var btn = document.getElementById('free-btn');
   if(btn){ btn.disabled = true; btn.style.opacity = '0.4'; btn.style.cursor = 'not-allowed'; btn.textContent = 'Empezar Gratis Ahora →'; }
   var m = document.getElementById('freeModal');
@@ -820,16 +698,9 @@ function cerrarFreeModal() {
 
 function toggleFreeBtn() {
   var em  = document.getElementById('free-email');
-  var nm  = document.getElementById('free-name');
-  var ln  = document.getElementById('free-lastname');
-  var ph  = document.getElementById('free-phone');
   var btn = document.getElementById('free-btn');
   if(!em || !btn) return;
-  var emailOk    = em.value.length > 3 && em.value.indexOf('@') > 0;
-  var nameOk     = nm ? nm.value.trim().length > 1 : true;
-  var lastnameOk = ln ? ln.value.trim().length > 1 : true;
-  var phoneOk    = ph ? ph.value.trim().length > 6 : true;
-  var ok = emailOk && nameOk && lastnameOk && phoneOk;
+  var ok = em.value.length > 3 && em.value.indexOf('@') > 0;
   btn.disabled      = !ok;
   btn.style.opacity = ok ? '1' : '0.4';
   btn.style.cursor  = ok ? 'pointer' : 'not-allowed';
@@ -837,14 +708,9 @@ function toggleFreeBtn() {
 
 function accederGratis() {
   var em = document.getElementById('free-email');
-  var nm = document.getElementById('free-name');
-  var ln = document.getElementById('free-lastname');
   if(!em || em.value.indexOf('@') < 1) return;
-  var email    = em.value.trim();
-  var name     = nm ? nm.value.trim() : '';
-  var lastname = ln ? ln.value.trim() : '';
-  var phone    = document.getElementById('free-phone') ? document.getElementById('free-phone').value.trim() : '';
-  var btn      = document.getElementById('free-btn');
+  var email = em.value.trim();
+  var btn   = document.getElementById('free-btn');
   if(btn){ btn.textContent = 'Un momento...'; btn.disabled = true; btn.style.opacity = '0.7'; }
 
   function goToApp() {
@@ -852,13 +718,27 @@ function accederGratis() {
     window.location.href = APP_FILE;
   }
 
-  fetch('https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email, firstName: name, lastName: lastname, phone: phone, plan: 'gratis', source: 'FreeDebt Pro Landing Page' })
-  })
-  .then(function(){ goToApp(); })
-  .catch(function(){ goToApp(); });
+  if(GHL_WEBHOOK_URL && GHL_WEBHOOK_URL.length > 20) {
+    // Send lead to GoHighLevel webhook
+    fetch(GHL_WEBHOOK_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email:     email,
+        firstName: '',
+        tags:      ['freedebt-basico', 'landing-page'],
+        source:    'FreeDebt Pro — Plan Basico',
+        plan:      'basico',
+        timestamp: new Date().toISOString()
+      })
+    })
+    .then(function(){ goToApp(); })
+    .catch(function(){ goToApp(); });
+  } else {
+    // GHL not configured yet — redirect directly
+    // When GHL_WEBHOOK_URL is set above, leads will be captured automatically
+    goToApp();
+  }
 }
 
 // ════════════════════
@@ -884,47 +764,26 @@ function abrirModal(nombre, tipo) {
 function togglePayBtn() {
   var cb  = document.getElementById('m-legal');
   var em  = document.getElementById('m-email');
-  var nm  = document.getElementById('m-name');
-  var ln  = document.getElementById('m-lastname');
-  var ph  = document.getElementById('m-phone');
   var btn = document.getElementById('m-pay-btn');
   if(!cb || !btn) return;
-  var emailOk    = em && em.value.length > 3 && em.value.indexOf('@') > 0;
-  var nameOk     = nm ? nm.value.trim().length > 1 : true;
-  var lastnameOk = ln ? ln.value.trim().length > 1 : true;
-  var phoneOk    = ph ? ph.value.trim().length > 6 : true;
-  var ok = cb.checked && emailOk && nameOk && lastnameOk && phoneOk;
+  var emailOk = em && em.value.length > 3 && em.value.indexOf('@') > 0;
+  var ok = cb.checked && emailOk;
   btn.disabled      = !ok;
   btn.style.opacity = ok ? '1' : '0.4';
   btn.style.cursor  = ok ? 'pointer' : 'not-allowed';
 }
 
 function irAPayPal() {
+  // Analytics hook — replace with real pixel event when tracking is installed
   if(typeof fbq === 'function') fbq('track', 'InitiateCheckout', { plan: planKey });
   if(typeof gtag === 'function') gtag('event', 'begin_checkout', { plan: planKey });
 
   var em = document.getElementById('m-email');
-  var nm = document.getElementById('m-name');
-  var ln = document.getElementById('m-lastname');
-  var ph = document.getElementById('m-phone');
-
   if(!em || em.value.length < 4 || em.value.indexOf('@') < 1){
     alert('Por favor ingresa tu correo electrónico válido para continuar.');
     if(em) em.focus();
     return;
   }
-
-  var email    = em.value.trim();
-  var name     = nm ? nm.value.trim() : '';
-  var lastname = ln ? ln.value.trim() : '';
-  var phone    = ph ? ph.value.trim() : '';
-
-  // Send lead to GHL before going to PayPal
-  fetch('https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email, firstName: name, lastName: lastname, phone: phone, plan: planKey, source: 'FreeDebt Pro - Plan ' + planKey })
-  }).catch(function(){});
 
   var url = PAYPAL[planKey];
   if(!url || url.length < 20){
@@ -984,7 +843,7 @@ var LEGAL = {
        '<h3>13. Binding Arbitration</h3><p>Any dispute shall be resolved through binding arbitration under AAA rules, in Broward County, Florida. You waive any right to a jury trial or class action.</p>'+
        '<h3>14. Governing Law</h3><p>These Terms are governed by the laws of the <strong>State of Florida, United States of America</strong>.</p>'+
        '<h3>15. Modifications</h3><p>We may update these Terms at any time. Continued use constitutes acceptance.</p>'+
-       '<h3>16. Contact</h3><p>FREENORTH ENTERPRISES, LLC<br>Miami, Florida, USA<br>support@freedebtpro.com</p>'
+       '<h3>16. Contact</h3><p>FREENORTH ENTERPRISES, LLC<br>Miramar, Florida, USA<br>support@freedebtpro.com</p>'
   },
   privacy: {
     t: 'Privacy Policy — FREENORTH ENTERPRISES, LLC',
@@ -998,7 +857,7 @@ var LEGAL = {
        '<h3>6. Your Rights</h3><p>Contact support@freedebtpro.com to request access, correction, or deletion of your data.</p>'+
        '<h3>7. Cookies & Tracking</h3><p>We may use cookies or tracking pixels to improve user experience and measure performance. You can disable cookies in your browser settings.</p>'+
        '<h3>8. Changes</h3><p>We may update this Privacy Policy at any time. Continued use constitutes acceptance.</p>'+
-       '<h3>9. Contact</h3><p>FREENORTH ENTERPRISES, LLC<br>Miami, Florida, USA<br>support@freedebtpro.com</p>'
+       '<h3>9. Contact</h3><p>FREENORTH ENTERPRISES, LLC<br>Miramar, Florida, USA<br>support@freedebtpro.com</p>'
   },
   refund: {
     t: 'Refund Policy — FREENORTH ENTERPRISES, LLC',
@@ -1007,7 +866,7 @@ var LEGAL = {
        '<h3>Cancellation</h3><p>Cancel anytime through your PayPal account. Access remains until end of current billing cycle. No partial refunds.</p>'+
        '<h3>Technical Issues</h3><p>Contact support@freedebtpro.com within 48 hours if technical issues prevent access.</p>'+
        '<h3>Legal Exceptions</h3><p>Refunds only issued if required by applicable law (State of Florida).</p>'+
-       '<h3>Contact</h3><p>FREENORTH ENTERPRISES, LLC<br>Miami, Florida, USA<br>support@freedebtpro.com</p>'
+       '<h3>Contact</h3><p>FREENORTH ENTERPRISES, LLC<br>Miramar, Florida, USA<br>support@freedebtpro.com</p>'
   },
   disclaimer: {
     t: 'Financial Disclaimer — FREENORTH ENTERPRISES, LLC',
@@ -1018,7 +877,7 @@ var LEGAL = {
        '<h3>No Affiliation</h3><p>Not affiliated with any bank, credit bureau (Equifax, Experian, TransUnion), or government agency.</p>'+
        '<h3>Limitation of Liability</h3><p>FREENORTH ENTERPRISES, LLC shall not be liable for any financial loss or harm arising from use of this platform.</p>'+
        '<h3>Governing Law</h3><p>State of Florida, USA. Binding arbitration in Broward County, FL.</p>'+
-       '<h3>Contact</h3><p>FREENORTH ENTERPRISES, LLC<br>Miami, Florida, USA<br>support@freedebtpro.com</p>'
+       '<h3>Contact</h3><p>FREENORTH ENTERPRISES, LLC<br>Miramar, Florida, USA<br>support@freedebtpro.com</p>'
   }
 };
 
@@ -1086,168 +945,6 @@ function cerrarExitModal(){
   var m = document.getElementById('exitModal');
   if(m) m.style.display = 'none';
 }
-
-// ── CALCULADORA FREE PLAN ────────────────────────────────────────
-var calcPlazo = 36;
-
-function calcSetPlazo(meses, btn){
-  calcPlazo = meses;
-  document.querySelectorAll('.calc-plazo-btn').forEach(function(b){ b.classList.remove('calc-plazo-active'); });
-  btn.classList.add('calc-plazo-active');
-  calcUpdate();
-}
-
-function calcUpdate(){
-  var balance = parseFloat(document.getElementById('calc-balance').value) || 0;
-  var apr     = parseFloat(document.getElementById('calc-apr').value)     || 0;
-  var pagoAct = parseFloat(document.getElementById('calc-pago').value)    || 0;
-
-  var empty   = document.getElementById('calc-empty');
-  var results = document.getElementById('calc-results');
-
-  if(!balance || !apr || !pagoAct){
-    if(empty)   empty.style.display   = 'block';
-    if(results) results.style.display = 'none';
-    return;
-  }
-
-  var r = (apr / 100) / 12; // monthly rate
-  var nombreTarjeta = document.getElementById('calc-nombre').value || 'tu tarjeta';
-
-  function fmt(n){
-    if(n >= 99999) return 'N/A';
-    return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
-
-  // ── Payment needed to clear balance in calcPlazo months ──
-  var pagoNuevo = (r === 0)
-    ? balance / calcPlazo
-    : (balance * r) / (1 - Math.pow(1 + r, -calcPlazo));
-
-  // ── Interest with CURRENT payment (simulate until paid off, max 600 months) ──
-  var bal1 = balance, interesActual = 0, mesesActual = 0;
-  if(pagoAct > balance * r){
-    while(bal1 > 0.01 && mesesActual < 600){
-      var int1 = bal1 * r;
-      interesActual += int1;
-      bal1 = bal1 + int1 - pagoAct;
-      if(bal1 < 0) bal1 = 0;
-      mesesActual++;
-    }
-  } else {
-    interesActual = 99999; // payment too low — never pays off
-  }
-
-  // ── Interest with NEW payment over calcPlazo months ──
-  var bal2 = balance, interesNuevo = 0;
-  for(var i = 0; i < calcPlazo; i++){
-    var int2 = bal2 * r;
-    interesNuevo += int2;
-    bal2 = bal2 + int2 - pagoNuevo;
-    if(bal2 < 0) bal2 = 0;
-  }
-
-  // ── Determine scenario ──
-  var userAlreadyPayingMore = (pagoAct >= pagoNuevo);
-  var newPlanMoreExpensive  = (interesNuevo > interesActual && interesActual < 99999);
-  var diferencia = Math.max(0, pagoNuevo - pagoAct);
-  var ahorro     = interesActual - interesNuevo; // can be negative
-
-  // ── Main message ──
-  var msgEl = document.getElementById('calc-msg');
-  if(userAlreadyPayingMore){
-    msgEl.innerHTML =
-      '✅ Ya estás pagando más de lo necesario para este plazo. ' +
-      'Con tu pago actual de <span style="color:var(--green)">' + fmt(pagoAct) + '/mes</span>, ' +
-      'podrías terminar de pagar <strong>' + nombreTarjeta + '</strong> <strong>antes de ' + calcPlazo + ' meses</strong>.';
-  } else {
-    msgEl.innerHTML =
-      'Para pagar <strong>' + nombreTarjeta + '</strong> en <strong>' + calcPlazo + ' meses</strong>, ' +
-      'necesitarías pagar <span style="color:var(--green)">' + fmt(pagoNuevo) + '/mes</span>.';
-  }
-
-  // ── "Más que tu pago actual" cell ──
-  var difEl   = document.getElementById('calc-diferencia');
-  var difLabel = difEl.previousElementSibling;
-  if(userAlreadyPayingMore){
-    difEl.textContent = '$0.00';
-    difEl.style.color = 'var(--green)';
-    if(difLabel) difLabel.textContent = 'Ya pagas suficiente';
-  } else {
-    difEl.textContent = '+' + fmt(diferencia);
-    difEl.style.color = 'var(--amber)';
-    if(difLabel) difLabel.textContent = 'Más que tu pago actual';
-  }
-
-  // ── Interest cells ──
-  document.getElementById('calc-interes-actual').textContent = fmt(interesActual);
-  document.getElementById('calc-interes-nuevo').textContent  = fmt(interesNuevo);
-
-  // ── Ahorro / warning ──
-  var ahorroEl    = document.getElementById('calc-ahorro');
-  var ahorroLabel = document.querySelector('[style*="AHORRO ESTIMADO"]');
-  if(newPlanMoreExpensive){
-    ahorroEl.textContent = '⚠️ Este plazo genera más intereses que tu pago actual';
-    ahorroEl.style.fontSize = '14px';
-    ahorroEl.style.color    = 'var(--amber)';
-    if(ahorroLabel) ahorroLabel.textContent = '⚠️ ADVERTENCIA';
-  } else if(ahorro <= 0){
-    ahorroEl.textContent = '$0.00';
-    ahorroEl.style.fontSize = '36px';
-    ahorroEl.style.color    = 'var(--green)';
-    if(ahorroLabel) ahorroLabel.textContent = '💰 AHORRO ESTIMADO EN INTERESES';
-  } else {
-    ahorroEl.textContent = fmt(ahorro);
-    ahorroEl.style.fontSize = '36px';
-    ahorroEl.style.color    = 'var(--green)';
-    if(ahorroLabel) ahorroLabel.textContent = '💰 AHORRO ESTIMADO EN INTERESES';
-  }
-
-  if(empty)   empty.style.display   = 'none';
-  if(results) results.style.display = 'block';
-
-  // Fire Pixel Lead event
-  if(typeof fbq === 'function') fbq('track', 'Lead', {content_name:'Calculadora Free', content_category:'calculator'});
-}
-
-function calcIrPayPal(tipo){
-  if(typeof fbq === 'function') fbq('track', 'InitiateCheckout', {plan: tipo, currency:'USD', value: tipo==='pro' ? 19.99 : 29.99});
-  var urls = {
-    pro:      'https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-6J935821PF666054JNHMYXJQ',
-    familiar: 'https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-0S340056FY952452YNHMYZMI'
-  };
-  window.open(urls[tipo], '_self');
-}
-
-function calcFormSubmit(e){
-  e.preventDefault();
-  var email    = document.getElementById('calc-email').value;
-  var name     = document.getElementById('calc-name') ? document.getElementById('calc-name').value.trim() : '';
-  var lastname = document.getElementById('calc-lastname') ? document.getElementById('calc-lastname').value.trim() : '';
-  var phone    = document.getElementById('calc-phone') ? document.getElementById('calc-phone').value.trim() : '';
-  if(!email || email.indexOf('@') < 1){ alert('Ingresa tu correo electrónico válido.'); return; }
-
-  if(typeof fbq === 'function') fbq('track', 'Lead', {content_name:'Guardar Plan', content_category:'email_capture'});
-
-  fetch(https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprIXEMfdl0/webhook-trigger/7f819a67-483c-4355-8067-a37501b899, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email, firstName: name, lastName: lastname, phone: phone, plan: 'gratis', source: 'FreeDebt Pro Calculadora' })
-  })
-  .then(function(){
-    var msg = document.getElementById('calc-email-msg');
-    if(msg) msg.style.display = 'block';
-    ['calc-email','calc-name','calc-lastname','calc-phone'].forEach(function(id){
-      var el = document.getElementById(id); if(el) el.value = '';
-    });
-  })
-  .catch(function(){
-    var msg = document.getElementById('calc-email-msg');
-    if(msg) msg.style.display = 'block';
-  });
-}
-// ── END CALCULADORA ──────────────────────────────────────────────
-
 </script>
 
 <!-- EXIT INTENT POPUP -->
@@ -1261,6 +958,30 @@ function calcFormSubmit(e){
     <p style="font-size:11px;color:var(--muted);margin-top:12px;font-family:'JetBrains Mono',monospace;">Sin tarjeta de crédito · Acceso inmediato</p>
   </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const btn = document.querySelector("button.btn-primary");
+  const input = document.querySelector("input[type='email']");
 
+  if (btn && input) {
+    btn.addEventListener("click", function() {
+      const email = input.value;
+
+      if (!email) return;
+
+      fetch("https://services.leadconnectorhq.com/hooks/bD3pD3nuKgprlXEMfdl0/webhook-trigger/ad025b6a-69ea-4371-8bbb-276fd502a7b3", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          source: "FreeDebtPro"
+        })
+      });
+    });
+  }
+});
+</script>
 </body>
 </html>
