@@ -551,7 +551,36 @@ function exportPDF(){
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3000);}
 
 // ═══ INIT ═══
-renderAll();
+
+// Auto-load calculator snapshot from landing page if no members saved yet
+(function autoLoadCalcData(){
+  var data = getData();
+  if(data.members && data.members.length > 0){ renderAll(); return; }
+  try {
+    var snap = localStorage.getItem('fdp_calc_snapshot');
+    if(!snap){ renderAll(); return; }
+    var d = JSON.parse(snap);
+    if(!d || !d.balance || !d.apr){ renderAll(); return; }
+    data.members = [{
+      id:    Date.now().toString(),
+      name:  'Yo',
+      emoji: '👤',
+      color: '#00d68f',
+      cards: [{
+        id:      (Date.now()+1).toString(),
+        name:    d.cardName || 'Mi tarjeta',
+        balance: parseFloat(d.balance)        || 0,
+        apr:     parseFloat(d.apr)            || 0,
+        min:     parseFloat(d.currentPayment) || 0,
+        payment: parseFloat(d.currentPayment) || 0
+      }]
+    }];
+    saveData(data);
+    showToast('Datos de tu calculo importados');
+  } catch(e){ console.warn('autoload:', e); }
+  renderAll();
+})();
+
 </script>
 </body>
 </html>
