@@ -624,6 +624,31 @@ function showToast(msg){
 // ═══════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════
+
+// Auto-load calculator snapshot from landing page if no cards saved yet
+(function autoLoadCalcData(){
+  if(getCards().length > 0){ renderAll(); return; }
+  try {
+    var snap = localStorage.getItem('fdp_calc_snapshot');
+    if(!snap){ renderAll(); return; }
+    var d = JSON.parse(snap);
+    if(!d || !d.balance || !d.apr){ renderAll(); return; }
+    saveCards([{
+      id:         Date.now().toString(),
+      name:       d.cardName      || 'Mi tarjeta',
+      balance:    parseFloat(d.balance)         || 0,
+      apr:        parseFloat(d.apr)             || 0,
+      min:        parseFloat(d.currentPayment)  || 0,
+      payment:    parseFloat(d.currentPayment)  || 0,
+      limit:      parseFloat(d.creditLimit)     || 0,
+      start:      new Date().toISOString().slice(0,7),
+      paidMonths: []
+    }]);
+    showToast('Datos de tu calculo importados automaticamente');
+  } catch(e){ console.warn('autoload err:', e); }
+  renderAll();
+})();
+
 renderAll();
 </script>
 </body>
