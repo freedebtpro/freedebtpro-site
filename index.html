@@ -577,7 +577,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
       </ul>
       <div style="font-size:12px;color:rgba(0,214,143,0.7);font-family:'JetBrains Mono',monospace;text-align:center;margin-bottom:8px;">🔥 El plan más elegido para organizar múltiples tarjetas</div>
       <button class="btn-plan go" onclick="abrirModal('Pro','pro')">Activar acceso completo ahora →</button>
-      <div style="font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:8px;line-height:1.5;font-family:'JetBrains Mono',monospace;">Después de tu pago en PayPal, recibirás las instrucciones de acceso a tu cuenta.</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:8px;line-height:1.5;font-family:'JetBrains Mono',monospace;">Cancela tu suscripción cuando quieras.</div>
       <div class="plan-footnote" style="color:rgba(255,255,255,0.3);">Sin contratos ni cargos ocultos</div>
     </div>
 
@@ -599,7 +599,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
         <li><span class="pf-check">✓</span> Soporte dedicado</li>
       </ul>
       <button class="btn-plan" onclick="abrirModal('Familiar','familiar')">Activar plan familiar →</button>
-      <div style="font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:8px;line-height:1.5;font-family:'JetBrains Mono',monospace;">Después de tu pago en PayPal, recibirás las instrucciones de acceso a tu cuenta.</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:8px;line-height:1.5;font-family:'JetBrains Mono',monospace;">Cancela tu suscripción cuando quieras.</div>
       <div class="plan-footnote">Sin contratos ni cargos ocultos</div>
     </div>
 
@@ -1304,6 +1304,19 @@ function calcUpdate(){
   }
   if(empty)   empty.style.display   = 'none';
   if(results) results.style.display = 'block';
+  // Save snapshot for dashboard auto-load
+  try {
+    var snap = {
+      cardName:       (document.getElementById('calc-nombre') ? document.getElementById('calc-nombre').value : '') || 'Mi tarjeta',
+      creditLimit:    parseFloat(document.getElementById('calc-limite') ? document.getElementById('calc-limite').value : 0) || 0,
+      balance:        balance,
+      apr:            apr,
+      currentPayment: pagoAct,
+      payoffMonths:   calcPlazo,
+      snapshotAt:     new Date().toISOString()
+    };
+    localStorage.setItem('fdp_calc_snapshot', JSON.stringify(snap));
+  } catch(e){}
 }
 
 function calcIrPayPal(tipo){
