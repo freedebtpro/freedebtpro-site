@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Dashboard Familiar — FreeDebt Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;700;800;900&family=Bricolage+Grotesque:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --bg:#080f1e;--bg2:#0d1628;--bg3:#111e35;
+  --green:#00d68f;--green2:#00a86b;
+  --amber:#fbbf24;--red:#f87171;--blue:#60a5fa;--purple:#a78bfa;
+  --white:#f0f4ff;--muted:rgba(240,244,255,0.5);--muted2:rgba(240,244,255,0.25);
+  --border:rgba(255,255,255,0.07);--border2:rgba(251,191,36,0.2);
+  --font-h:'Cabinet Grotesk',sans-serif;
+  --font-b:'Bricolage Grotesque',sans-serif;
+  --font-m:'JetBrains Mono',monospace;
+  --radius:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--white);font-family:var(--font-b);min-height:100vh;}
+
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,15,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-h);font-weight:900;font-size:18px;text-decoration:none;color:var(--white);}
+.logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--green),var(--green2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.logo span{color:var(--green);}
+.nav-badge{background:rgba(251,191,36,0.1);border:1px solid var(--border2);color:var(--amber);font-family:var(--font-m);font-size:10px;padding:4px 10px;border-radius:99px;letter-spacing:1px;}
+.nav-actions{display:flex;gap:10px;}
+.btn-sm{padding:7px 14px;border-radius:8px;font-family:var(--font-b);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-outline:hover{border-color:rgba(255,255,255,0.2);color:var(--white);}
+.btn-primary{background:linear-gradient(135deg,var(--amber),#f59e0b);color:#080f1e;font-weight:700;}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green2));color:#080f1e;font-weight:700;}
+
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 60px);}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}}
+
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;overflow-y:auto;}
+.sidebar-label{font-family:var(--font-m);font-size:10px;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;padding:0 8px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;cursor:pointer;font-size:14px;color:var(--muted);transition:all .2s;margin-bottom:2px;}
+.nav-item:hover{background:rgba(255,255,255,0.04);color:var(--white);}
+.nav-item.active{background:rgba(251,191,36,0.08);color:var(--amber);border:1px solid var(--border2);}
+.nav-item .icon{font-size:16px;width:20px;text-align:center;}
+
+/* MEMBER TABS */
+.member-tabs{display:flex;flex-direction:column;gap:4px;margin-top:8px;}
+.member-tab{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .2s;border:1px solid transparent;}
+.member-tab:hover{background:rgba(255,255,255,0.04);color:var(--white);}
+.member-tab.active{background:rgba(0,214,143,0.06);color:var(--white);border-color:var(--border2);}
+.member-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;font-family:var(--font-h);flex-shrink:0;}
+.member-info{flex:1;overflow:hidden;}
+.member-name-sm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.member-debt-sm{font-family:var(--font-m);font-size:10px;color:var(--muted);}
+
+.sidebar-summary{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:16px;}
+.ss-label{font-family:var(--font-m);font-size:10px;color:var(--muted2);margin-bottom:4px;}
+.ss-value{font-family:var(--font-h);font-size:18px;font-weight:900;}
+
+.main{padding:28px 24px;overflow-y:auto;}
+@media(max-width:768px){.main{padding:16px;}}
+
+.page{display:none;}
+.page.active{display:block;}
+
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:12px;}
+.section-title{font-family:var(--font-h);font-size:22px;font-weight:900;letter-spacing:-0.5px;}
+.section-subtitle{font-size:13px;color:var(--muted);margin-top:2px;}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;}
+.s-label{font-family:var(--font-m);font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.s-value{font-family:var(--font-h);font-size:24px;font-weight:900;line-height:1;}
+.s-value.red{color:var(--red);}
+.s-value.green{color:var(--green);}
+.s-value.amber{color:var(--amber);}
+.s-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* MEMBERS GRID */
+.members-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:24px;}
+.member-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:border-color .2s;}
+.member-card:hover{border-color:var(--border2);}
+.member-card-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.member-avatar-lg{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;font-family:var(--font-h);flex-shrink:0;}
+.member-card-name{font-family:var(--font-h);font-size:16px;font-weight:800;}
+.member-card-sub{font-size:12px;color:var(--muted);}
+.member-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.ms-item{background:var(--bg3);border-radius:8px;padding:8px 10px;}
+.ms-label{font-family:var(--font-m);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px;}
+.ms-value{font-family:var(--font-h);font-size:14px;font-weight:700;}
+.ms-value.red{color:var(--red);}
+.ms-value.green{color:var(--green);}
+.member-card-actions{display:flex;gap:8px;}
+.btn-xs{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-xs-outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-xs-green{background:rgba(0,214,143,0.1);color:var(--green);border:1px solid rgba(0,214,143,0.2);}
+.btn-xs-outline:hover{border-color:var(--border2);color:var(--white);}
+.progress-bar{height:5px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:10px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green2));border-radius:3px;}
+
+/* COMBINED STRATEGY */
+.combined-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+.combined-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.combined-bar-title{font-family:var(--font-h);font-size:15px;font-weight:800;}
+.debt-bars{display:flex;flex-direction:column;gap:10px;}
+.debt-bar-item{display:flex;align-items:center;gap:10px;font-size:13px;}
+.db-name{width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0;}
+.db-bar{flex:1;height:20px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;}
+.db-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-family:var(--font-m);font-size:10px;color:#080f1e;font-weight:700;}
+.db-amount{width:80px;text-align:right;font-family:var(--font-m);font-size:11px;color:var(--muted);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid rgba(0,214,143,0.2);border-radius:20px;padding:32px;max-width:440px;width:100%;max-height:88vh;overflow-y:auto;}
+.modal-title{font-family:var(--font-h);font-size:19px;font-weight:900;margin-bottom:20px;}
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-family:var(--font-m);font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.form-group input, .form-group select{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:var(--font-b);font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;}
+.form-group input:focus, .form-group select:focus{border-color:var(--green);}
+.form-group select option{background:var(--bg2);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.modal-actions{display:flex;gap:10px;margin-top:20px;}
+.btn-cancel{flex:1;padding:12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;cursor:pointer;font-family:var(--font-b);font-size:14px;}
+.btn-save{flex:2;padding:12px;background:linear-gradient(135deg,var(--green),var(--green2));color:#080f1e;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-h);font-size:15px;font-weight:900;}
+
+/* MEMBER DETAIL */
+.member-detail{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
+.member-detail-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.member-detail-title{font-family:var(--font-h);font-size:20px;font-weight:900;}
+.member-detail-sub{font-size:13px;color:var(--muted);}
+.cards-mini{display:flex;flex-direction:column;gap:10px;}
+.card-mini{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.card-mini-name{font-family:var(--font-h);font-size:14px;font-weight:700;flex:1;}
+.card-mini-stats{display:flex;gap:10px;flex-wrap:wrap;}
+.cms{font-family:var(--font-m);font-size:11px;color:var(--muted);white-space:nowrap;}
+.cms span{color:var(--white);}
+
+.empty-state{text-align:center;padding:48px 20px;}
+.e-icon{font-size:44px;margin-bottom:14px;opacity:.5;}
+.e-title{font-family:var(--font-h);font-size:19px;font-weight:800;margin-bottom:8px;}
+.e-sub{font-size:14px;color:var(--muted);margin-bottom:22px;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:12px 20px;font-size:13px;color:var(--green);font-family:var(--font-m);z-index:300;opacity:0;transition:all .3s;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Member color palette */
+.color-0{background:#00d68f;} .color-1{background:#60a5fa;} .color-2{background:#a78bfa;}
+.color-3{background:#f87171;} .color-4{background:#fbbf24;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="index.html"><div class="logo-icon">💳</div>FreeDebt<span>Pro</span></a>
+  <div class="nav-badge">FAMILIAR</div>
+  <div class="nav-actions">
+    <button class="btn-sm btn-outline" onclick="exportPDF()">📄 PDF Familiar</button>
+    <button class="btn-sm btn-primary" onclick="openAddMember()">+ Miembro</button>
+  </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div style="margin-bottom:20px;">
+      <div class="sidebar-label">Navegación</div>
+      <div class="nav-item active" onclick="showPage('overview')"><span class="icon">🏠</span> Resumen familiar</div>
+      <div class="nav-item" onclick="showPage('members')"><span class="icon">👥</span> Miembros</div>
+      <div class="nav-item" onclick="showPage('combined')"><span class="icon">📊</span> Deuda combinada</div>
+    </div>
+    <div>
+      <div class="sidebar-label">Miembros</div>
+      <div class="member-tabs" id="sidebar-members"></div>
+    </div>
+    <div>
+      <div class="sidebar-summary">
+        <div class="ss-label">Deuda familiar total</div>
+        <div class="ss-value" style="color:var(--red);" id="sb-family-debt">$0</div>
+      </div>
+      <div class="sidebar-summary" style="margin-top:8px;">
+        <div class="ss-label">Miembros activos</div>
+        <div class="ss-value" style="color:var(--amber);" id="sb-member-count">0 / 5</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <div class="page active" id="page-overview">
+      <div class="section-header">
+        <div><div class="section-title">Resumen Familiar</div><div class="section-subtitle">Vista general de toda la familia</div></div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="s-label">Deuda total familiar</div><div class="s-value red" id="ov-total">$0</div><div class="s-sub">suma de todos los miembros</div></div>
+        <div class="stat-card"><div class="s-label">Pago mensual familiar</div><div class="s-value amber" id="ov-payment">$0</div><div class="s-sub">total comprometido</div></div>
+        <div class="stat-card"><div class="s-label">Tarjetas total</div><div class="s-value" id="ov-cards">0</div><div class="s-sub">en todos los miembros</div></div>
+        <div class="stat-card"><div class="s-label">Miembros</div><div class="s-value amber" id="ov-members">0</div><div class="s-sub">de 5 disponibles</div></div>
+      </div>
+      <div id="overview-members-preview"></div>
+      <div id="overview-empty" class="empty-state">
+        <div class="e-icon">👨‍👩‍👧</div>
+        <div class="e-title">Agrega el primer miembro</div>
+        <div class="e-sub">Crea hasta 5 perfiles familiares, cada uno con sus propias tarjetas.</div>
+        <button class="btn-sm btn-primary" style="padding:12px 24px;font-size:15px;" onclick="openAddMember()">+ Agregar miembro</button>
+      </div>
+    </div>
+
+    <!-- MEMBERS PAGE -->
+    <div class="page" id="page-members">
+      <div class="section-header">
+        <div><div class="section-title">Miembros</div><div class="section-subtitle">Gestiona cada miembro y sus tarjetas</div></div>
+        <button class="btn-sm btn-primary" onclick="openAddMember()">+ Agregar miembro</button>
+      </div>
+      <div class="members-grid" id="members-grid"></div>
+      <div id="members-empty" class="empty-state">
+        <div class="e-icon">👥</div>
+        <div class="e-title">Sin miembros todavía</div>
+        <div class="e-sub">Crea hasta 5 perfiles familiares.</div>
+        <button class="btn-sm btn-primary" style="padding:12px 24px;" onclick="openAddMember()">+ Agregar miembro</button>
+      </div>
+    </div>
+
+    <!-- COMBINED PAGE -->
+    <div class="page" id="page-combined">
+      <div class="section-header">
+        <div><div class="section-title">Deuda Combinada</div><div class="section-subtitle">Comparación visual entre miembros</div></div>
+      </div>
+      <div id="combined-content"></div>
+    </div>
+
+    <!-- MEMBER DETAIL (dynamic) -->
+    <div class="page" id="page-member-detail">
+      <div id="member-detail-content"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ADD MEMBER MODAL -->
+<div class="modal-overlay" id="memberModal">
+  <div class="modal-box">
+    <div class="modal-title">Agregar miembro familiar</div>
+    <div class="form-group">
+      <label>Nombre del miembro</label>
+      <input id="m-name" type="text" placeholder="Ej. María, Juan..."/>
+    </div>
+    <div class="form-group">
+      <label>Emoji / ícono</label>
+      <input id="m-emoji" type="text" placeholder="👩 👨 👦 👧" maxlength="2"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeMemberModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveMember()">Crear miembro</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD CARD TO MEMBER MODAL -->
+<div class="modal-overlay" id="cardModal">
+  <div class="modal-box">
+    <div class="modal-title">Agregar tarjeta</div>
+    <div class="form-group">
+      <label>Nombre de la tarjeta</label>
+      <input id="c-name" type="text" placeholder="Ej. Visa Gold"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Balance ($)</label><input id="c-balance" type="number" min="0" step="0.01" placeholder="2500"/></div>
+      <div class="form-group"><label>APR (%)</label><input id="c-apr" type="number" min="0" max="100" step="0.01" placeholder="22.99"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Pago mínimo ($)</label><input id="c-min" type="number" min="0" step="0.01" placeholder="35"/></div>
+      <div class="form-group"><label>Pago deseado ($)</label><input id="c-payment" type="number" min="0" step="0.01" placeholder="150"/></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeCardModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveCardToMember()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ PAYMENT PROVIDER ABSTRACTION ═══
+var paymentProvider = {
+  current: localStorage.getItem('fdp_plan_provider') || 'paypal',
+  plan:    localStorage.getItem('fdp_plan') || 'familiar',
+  verify:  function(){ return this.plan === 'familiar'; }
+};
+
+// ═══ DATA LAYER ═══
+var STORAGE_KEY = 'fdp_family_data';
+function getData(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"members":[]}'); }catch(e){ return {members:[]}; } }
+function saveData(d){ localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
+
+// ═══ MATH ═══
+function calcCard(card){
+  var b = parseFloat(card.balance)||0, r = (parseFloat(card.apr)||0)/100/12;
+  var p = parseFloat(card.payment)||parseFloat(card.min)||0;
+  var ti=0, bal=b, months=0;
+  if(r===0){ months = p>0?Math.ceil(b/p):999; ti=0; }
+  else if(p<=b*r){ months=999; ti=99999; }
+  else { while(bal>0.01&&months<600){ var int=bal*r; ti+=int; bal=bal+int-p; if(bal<0)bal=0; months++; } }
+  return {months, totalInterest:ti};
+}
+function memberTotal(member){
+  var cards = member.cards||[];
+  return {
+    debt:    cards.reduce(function(s,c){ return s+(parseFloat(c.balance)||0); },0),
+    payment: cards.reduce(function(s,c){ return s+(parseFloat(c.payment)||0); },0),
+    cards:   cards.length,
+    interest:cards.reduce(function(s,c){ return s+calcCard(c).totalInterest; },0)
+  };
+}
+function familyTotal(data){
+  var t={debt:0,payment:0,cards:0,interest:0};
+  (data.members||[]).forEach(function(m){ var mt=memberTotal(m); t.debt+=mt.debt; t.payment+=mt.payment; t.cards+=mt.cards; t.interest+=mt.interest; });
+  return t;
+}
+function fmt(n){ if(n>=99990)return'N/A'; return'$'+(Math.round(n*100)/100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+
+// ═══ COLOR PALETTE ═══
+var COLORS = ['#00d68f','#60a5fa','#a78bfa','#f87171','#fbbf24'];
+var EMOJIS = ['👩','👨','👦','👧','🧑'];
+
+// ═══ NAV ═══
+var currentMemberIdx = null;
+function showPage(name){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  document.getElementById('page-'+name).classList.add('active');
+  var map={overview:0,members:1,combined:2};
+  var items=document.querySelectorAll('.nav-item');
+  if(map[name]!==undefined&&items[map[name]])items[map[name]].classList.add('active');
+  renderAll();
+}
+function showMemberDetail(idx){
+  currentMemberIdx = idx;
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.member-tab').forEach(function(t,i){t.classList.toggle('active',i===idx);});
+  document.getElementById('page-member-detail').classList.add('active');
+  renderMemberDetail(idx);
+}
+
+// ═══ MODALS ═══
+var addingCardMemberId = null;
+function openAddMember(){
+  var data=getData(); if(data.members.length>=5){showToast('⚠️ Máximo 5 miembros');return;}
+  document.getElementById('m-name').value=''; document.getElementById('m-emoji').value='';
+  document.getElementById('memberModal').classList.add('open');
+}
+function closeMemberModal(){document.getElementById('memberModal').classList.remove('open');}
+function saveMember(){
+  var name=document.getElementById('m-name').value.trim();
+  if(!name){showToast('⚠️ Ingresa un nombre');return;}
+  var data=getData();
+  var idx=data.members.length;
+  data.members.push({id:Date.now().toString(),name,emoji:document.getElementById('m-emoji').value||EMOJIS[idx%5],color:COLORS[idx%5],cards:[]});
+  saveData(data); closeMemberModal(); renderAll(); showToast('✅ Miembro creado');
+}
+function deleteMember(id){
+  if(!confirm('¿Eliminar este miembro y sus tarjetas?'))return;
+  var data=getData(); data.members=data.members.filter(function(m){return m.id!==id;}); saveData(data); showPage('members'); showToast('🗑️ Miembro eliminado');
+}
+function openAddCardToMember(memberId){
+  addingCardMemberId=memberId;
+  ['c-name','c-balance','c-apr','c-min','c-payment'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('cardModal').classList.add('open');
+}
+function closeCardModal(){document.getElementById('cardModal').classList.remove('open');}
+function saveCardToMember(){
+  var name=document.getElementById('c-name').value.trim();
+  var balance=parseFloat(document.getElementById('c-balance').value)||0;
+  var apr=parseFloat(document.getElementById('c-apr').value)||0;
+  if(!name||!balance||!apr){showToast('⚠️ Nombre, balance y APR requeridos');return;}
+  var data=getData();
+  var member=data.members.find(function(m){return m.id===addingCardMemberId;});
+  if(!member)return;
+  var min=parseFloat(document.getElementById('c-min').value)||0;
+  var payment=parseFloat(document.getElementById('c-payment').value)||min;
+  if(!member.cards) member.cards=[];
+  member.cards.push({id:Date.now().toString(),name,balance,apr,min,payment});
+  saveData(data); closeCardModal();
+  if(currentMemberIdx!==null) renderMemberDetail(currentMemberIdx);
+  renderAll(); showToast('✅ Tarjeta agregada');
+}
+function deleteCard(memberId, cardId){
+  var data=getData();
+  var member=data.members.find(function(m){return m.id===memberId;});
+  if(!member)return;
+  member.cards=member.cards.filter(function(c){return c.id!==cardId;});
+  saveData(data);
+  if(currentMemberIdx!==null) renderMemberDetail(currentMemberIdx);
+  renderAll(); showToast('🗑️ Tarjeta eliminada');
+}
+
+// ═══ RENDER ═══
+function renderAll(){
+  var data=getData(); var ft=familyTotal(data);
+  // Sidebar
+  var smt=document.getElementById('sidebar-members'); smt.innerHTML='';
+  data.members.forEach(function(m,i){
+    var mt=memberTotal(m);
+    var el=document.createElement('div'); el.className='member-tab'+(currentMemberIdx===i?' active':'');
+    el.onclick=function(){showMemberDetail(i);};
+    el.innerHTML='<div class="member-avatar color-'+i+'" style="background:'+m.color+';color:#080f1e;">'+m.emoji+'</div>'
+      +'<div class="member-info"><div class="member-name-sm">'+m.name+'</div><div class="member-debt-sm">'+fmt(mt.debt)+'</div></div>';
+    smt.appendChild(el);
+  });
+  document.getElementById('sb-family-debt').textContent=fmt(ft.debt);
+  document.getElementById('sb-member-count').textContent=data.members.length+' / 5';
+  // Overview stats
+  document.getElementById('ov-total').textContent=fmt(ft.debt);
+  document.getElementById('ov-payment').textContent=fmt(ft.payment);
+  document.getElementById('ov-cards').textContent=ft.cards;
+  document.getElementById('ov-members').textContent=data.members.length;
+  // Overview empty
+  var ovEmp=document.getElementById('overview-empty');
+  var ovPrev=document.getElementById('overview-members-preview');
+  if(data.members.length===0){ovEmp.style.display='block';ovPrev.innerHTML='';return;}
+  ovEmp.style.display='none';
+  ovPrev.innerHTML='<div class="members-grid">'+data.members.map(function(m,i){
+    var mt=memberTotal(m);
+    return '<div class="member-card" onclick="showMemberDetail('+i+')" style="cursor:pointer;">'
+      +'<div class="member-card-header"><div class="member-avatar-lg" style="background:'+m.color+';color:#080f1e;">'+m.emoji+'</div>'
+      +'<div><div class="member-card-name">'+m.name+'</div><div class="member-card-sub">'+mt.cards+' tarjeta(s)</div></div></div>'
+      +'<div class="member-stats">'
+      +'<div class="ms-item"><div class="ms-label">Deuda</div><div class="ms-value red">'+fmt(mt.debt)+'</div></div>'
+      +'<div class="ms-item"><div class="ms-label">Pago/mes</div><div class="ms-value">'+fmt(mt.payment)+'</div></div>'
+      +'</div></div>';
+  }).join('')+'</div>';
+  // Members page
+  var mg=document.getElementById('members-grid');
+  var me=document.getElementById('members-empty');
+  if(data.members.length===0){mg.innerHTML='';me.style.display='block';}
+  else{
+    me.style.display='none';
+    mg.innerHTML=data.members.map(function(m,i){
+      var mt=memberTotal(m);
+      return '<div class="member-card">'
+        +'<div class="member-card-header"><div class="member-avatar-lg" style="background:'+m.color+';color:#080f1e;">'+m.emoji+'</div>'
+        +'<div><div class="member-card-name">'+m.name+'</div><div class="member-card-sub">'+mt.cards+' tarjeta(s) · '+fmt(mt.debt)+'</div></div></div>'
+        +'<div class="member-stats">'
+        +'<div class="ms-item"><div class="ms-label">Deuda</div><div class="ms-value red">'+fmt(mt.debt)+'</div></div>'
+        +'<div class="ms-item"><div class="ms-label">Interés est.</div><div class="ms-value red">'+fmt(mt.interest)+'</div></div>'
+        +'</div>'
+        +'<div class="member-card-actions">'
+        +'<button class="btn-xs btn-xs-green" onclick="showMemberDetail('+i+')">Ver detalle</button>'
+        +'<button class="btn-xs btn-xs-outline" onclick="openAddCardToMember(\''+m.id+'\')">+ Tarjeta</button>'
+        +'<button class="btn-xs btn-xs-outline" onclick="deleteMember(\''+m.id+'\')" style="color:var(--red);border-color:rgba(248,113,113,0.3);">🗑️</button>'
+        +'</div></div>';
+    }).join('');
+  }
+  // Combined
+  var cc=document.getElementById('combined-content');
+  if(data.members.length===0){cc.innerHTML='<div class="empty-state"><div class="e-icon">📊</div><div class="e-title">Sin datos</div><div class="e-sub">Agrega miembros primero.</div></div>';return;}
+  var maxDebt=Math.max.apply(null,data.members.map(function(m){return memberTotal(m).debt;}));
+  cc.innerHTML='<div class="combined-bar"><div class="combined-bar-header"><div class="combined-bar-title">Distribución de deuda por miembro</div><div style="font-family:var(--font-m);font-size:11px;color:var(--muted);">Total: '+fmt(ft.debt)+'</div></div>'
+    +'<div class="debt-bars">'
+    +data.members.map(function(m){
+      var mt=memberTotal(m); var pct=maxDebt>0?Math.round(mt.debt/maxDebt*100):0;
+      return '<div class="debt-bar-item"><div class="db-name">'+m.emoji+' '+m.name+'</div>'
+        +'<div class="db-bar"><div class="db-fill" style="width:'+pct+'%;background:'+m.color+';">'+fmt(mt.debt)+'</div></div>'
+        +'<div class="db-amount">'+mt.cards+' tarj.</div></div>';
+    }).join('')
+    +'</div></div>'
+    +'<div class="stat-grid">'
+    +data.members.map(function(m){
+      var mt=memberTotal(m);
+      return '<div class="stat-card"><div class="s-label">'+m.emoji+' '+m.name+'</div>'
+        +'<div class="s-value red">'+fmt(mt.debt)+'</div>'
+        +'<div class="s-sub">'+mt.cards+' tarj · '+fmt(mt.payment)+'/mes</div></div>';
+    }).join('')
+    +'</div>';
+}
+
+function renderMemberDetail(idx){
+  var data=getData(); var member=data.members[idx];
+  if(!member){document.getElementById('member-detail-content').innerHTML='';return;}
+  var mt=memberTotal(member); var cards=member.cards||[];
+  var html='<div class="section-header"><div>'
+    +'<div class="section-title">'+member.emoji+' '+member.name+'</div>'
+    +'<div class="section-subtitle">'+fmt(mt.debt)+' deuda total · '+cards.length+' tarjeta(s)</div>'
+    +'</div>'
+    +'<div style="display:flex;gap:8px;">'
+    +'<button class="btn-sm btn-green" onclick="openAddCardToMember(\''+member.id+'\')">+ Tarjeta</button>'
+    +'</div></div>'
+    +'<div class="stat-grid">'
+    +'<div class="stat-card"><div class="s-label">Deuda total</div><div class="s-value red">'+fmt(mt.debt)+'</div></div>'
+    +'<div class="stat-card"><div class="s-label">Pago mensual</div><div class="s-value amber">'+fmt(mt.payment)+'</div></div>'
+    +'<div class="stat-card"><div class="s-label">Interés estimado</div><div class="s-value red">'+fmt(mt.interest)+'</div></div>'
+    +'<div class="stat-card"><div class="s-label">Tarjetas</div><div class="s-value">'+cards.length+'</div></div>'
+    +'</div>';
+  if(cards.length===0){
+    html+='<div class="empty-state"><div class="e-icon">💳</div><div class="e-title">Sin tarjetas</div><div class="e-sub">Agrega tarjetas a este miembro.</div><button class="btn-sm btn-primary" style="padding:12px 20px;" onclick="openAddCardToMember(\''+member.id+'\')">+ Agregar tarjeta</button></div>';
+  } else {
+    html+='<div class="cards-mini">'+cards.map(function(card){
+      var res=calcCard(card);
+      return '<div class="card-mini">'
+        +'<div class="card-mini-name">💳 '+card.name+'</div>'
+        +'<div class="card-mini-stats">'
+        +'<div class="cms">Balance: <span>'+fmt(card.balance)+'</span></div>'
+        +'<div class="cms">APR: <span>'+card.apr+'%</span></div>'
+        +'<div class="cms">Pago: <span>'+fmt(card.payment)+'</span></div>'
+        +'<div class="cms">Interés est.: <span style="color:var(--red);">'+fmt(res.totalInterest)+'</span></div>'
+        +'<div class="cms">Plazo est.: <span style="color:var(--green);">'+(res.months<600?res.months+' meses':'N/A')+'</span></div>'
+        +'</div>'
+        +'<button class="btn-xs btn-xs-outline" onclick="deleteCard(\''+member.id+'\',\''+card.id+'\')" style="color:var(--red);border-color:rgba(248,113,113,0.3);">🗑️</button>'
+        +'</div>';
+    }).join('')+'</div>';
+  }
+  document.getElementById('member-detail-content').innerHTML=html;
+}
+
+// ═══ PDF ═══
+function exportPDF(){
+  var data=getData();
+  if(data.members.length===0){showToast('⚠️ Agrega miembros primero');return;}
+  showToast('📄 Generando PDF familiar...');
+  var {jsPDF}=window.jspdf; var doc=new jsPDF(); var y=20;
+  doc.setFillColor(8,15,30); doc.rect(0,0,220,300,'F');
+  doc.setTextColor(251,191,36); doc.setFontSize(18); doc.setFont('helvetica','bold');
+  doc.text('FreeDebt Pro — Reporte Familiar', 14, y); y+=8;
+  doc.setTextColor(180,200,230); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Generado: '+new Date().toLocaleDateString('es'), 14, y); y+=12;
+  var ft=familyTotal(data);
+  doc.setTextColor(240,100,100); doc.setFontSize(13); doc.setFont('helvetica','bold');
+  doc.text('Deuda familiar total: $'+ft.debt.toFixed(2), 14, y); y+=10;
+  data.members.forEach(function(member){
+    if(y>250){doc.addPage();y=20;}
+    var mt=memberTotal(member);
+    doc.setTextColor(251,191,36); doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text(member.name + ' — $'+mt.debt.toFixed(2), 14, y); y+=6;
+    (member.cards||[]).forEach(function(card){
+      if(y>260){doc.addPage();y=20;}
+      var res=calcCard(card);
+      doc.setTextColor(180,200,230); doc.setFontSize(10); doc.setFont('helvetica','normal');
+      doc.text('  '+card.name+': $'+parseFloat(card.balance).toFixed(2)+' @ '+card.apr+'% — Interés: $'+res.totalInterest.toFixed(2), 20, y); y+=5;
+    });
+    y+=4;
+  });
+  doc.setTextColor(100,180,120); doc.setFontSize(9);
+  doc.text('FreeDebt Pro — freedebtpro.app — Herramienta educativa.', 14, 285);
+  doc.save('freedebt-pro-familiar.pdf');
+  showToast('✅ PDF descargado');
+}
+
+// ═══ TOAST ═══
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3000);}
+
+// ═══ INIT ═══
+renderAll();
+</script>
+</body>
+</html>
