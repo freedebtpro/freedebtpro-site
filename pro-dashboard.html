@@ -144,6 +144,9 @@ body{background:var(--bg);color:var(--white);font-family:var(--font-b);min-heigh
 .modal-actions{display:flex;gap:10px;margin-top:20px;}
 .btn-cancel{flex:1;padding:12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;cursor:pointer;font-family:var(--font-b);font-size:14px;}
 .btn-save{flex:2;padding:12px;background:linear-gradient(135deg,var(--green),var(--green2));color:#080f1e;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-h);font-size:15px;font-weight:900;}
+.plazo-btn{padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.07);background:transparent;color:rgba(240,244,255,0.5);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;transition:all .2s;}
+.plazo-btn.active,.plazo-btn:hover{background:rgba(0,214,143,0.15);color:#00d68f;border-color:rgba(0,214,143,0.4);}
+
 
 /* EMPTY STATE */
 .empty-state{text-align:center;padding:60px 20px;}
@@ -265,19 +268,19 @@ body{background:var(--bg);color:var(--white);font-family:var(--font-b);min-heigh
 <!-- ADD/EDIT CARD MODAL -->
 <div class="modal-overlay" id="cardModal">
   <div class="modal-box">
-    <div class="modal-title" id="modal-title">Agregar tarjeta</div>
+<div class="modal-title" id="modal-title">Agregar tarjeta</div>
     <div class="form-group">
       <label>Nombre de la tarjeta</label>
-      <input id="f-name" type="text" placeholder="Ej. Visa Platinum"/>
+      <input id="f-name" type="text" placeholder="Ej. Visa Platinum" oninput="calcModalPayment()"/>
     </div>
     <div class="form-row">
       <div class="form-group">
         <label>Balance actual ($)</label>
-        <input id="f-balance" type="number" min="0" step="0.01" placeholder="3200"/>
+        <input id="f-balance" type="number" min="0" step="0.01" placeholder="3200" oninput="calcModalPayment()"/>
       </div>
       <div class="form-group">
         <label>APR (%)</label>
-        <input id="f-apr" type="number" min="0" max="100" step="0.01" placeholder="24.99"/>
+        <input id="f-apr" type="number" min="0" max="100" step="0.01" placeholder="24.99" oninput="calcModalPayment()"/>
       </div>
     </div>
     <div class="form-row">
@@ -286,17 +289,24 @@ body{background:var(--bg);color:var(--white);font-family:var(--font-b);min-heigh
         <input id="f-min" type="number" min="0" step="0.01" placeholder="50"/>
       </div>
       <div class="form-group">
-        <label>Pago mensual deseado ($)</label>
-        <input id="f-payment" type="number" min="0" step="0.01" placeholder="200"/>
+        <label>Límite de crédito ($)</label>
+        <input id="f-limit" type="number" min="0" step="0.01" placeholder="5000"/>
       </div>
     </div>
     <div class="form-group">
-      <label>Límite de crédito ($)</label>
-      <input id="f-limit" type="number" min="0" step="0.01" placeholder="5000"/>
+      <label>¿En cuántos meses quieres pagarlo?</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <button type="button" class="plazo-btn" onclick="setPlazo(12,this)">12 meses</button>
+        <button type="button" class="plazo-btn" onclick="setPlazo(24,this)">24 meses</button>
+        <button type="button" class="plazo-btn active" onclick="setPlazo(36,this)">36 meses</button>
+        <button type="button" class="plazo-btn" onclick="setPlazo(48,this)">48 meses</button>
+        <button type="button" class="plazo-btn" onclick="setPlazo(60,this)">60 meses</button>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Fecha de inicio (mes de referencia)</label>
-      <input id="f-start" type="month"/>
+    <div id="modal-calc-result" style="display:none;background:rgba(0,214,143,0.08);border:1px solid rgba(0,214,143,0.2);border-radius:12px;padding:14px;margin-top:4px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(0,214,143,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Pago mensual necesario</div>
+      <div id="modal-pago-calc" style="font-family:'Cabinet Grotesk',sans-serif;font-size:28px;font-weight:900;color:#00d68f;"></div>
+      <div id="modal-interes-calc" style="font-size:12px;color:rgba(240,244,255,0.5);margin-top:4px;font-family:'JetBrains Mono',monospace;"></div>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
@@ -379,10 +389,16 @@ var editingId = null;
 function openAddCard(){
   editingId = null;
   document.getElementById('modal-title').textContent = 'Agregar tarjeta';
-  ['f-name','f-balance','f-apr','f-min','f-payment','f-limit','f-start'].forEach(function(id){
+  ['f-name','f-balance','f-apr','f-min','f-limit'].forEach(function(id){
     var el = document.getElementById(id); if(el) el.value = '';
   });
-  var now = new Date(); document.getElementById('f-start').value = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  modalPlazo = 36; window._modalCalcPayment = 0;
+  document.querySelectorAll('.plazo-btn').forEach(function(b,i){
+    b.style.background=i===2?'rgba(0,214,143,0.15)':'transparent';
+    b.style.color=i===2?'#00d68f':'rgba(240,244,255,0.5)';
+    b.style.borderColor=i===2?'rgba(0,214,143,0.4)':'rgba(255,255,255,0.07)';
+  });
+  var res=document.getElementById('modal-calc-result'); if(res) res.style.display='none';
   document.getElementById('cardModal').classList.add('open');
 }
 function openEditCard(id){
@@ -405,7 +421,7 @@ function saveCard(){
   var balance = parseFloat(document.getElementById('f-balance').value) || 0;
   var apr     = parseFloat(document.getElementById('f-apr').value)     || 0;
   var min     = parseFloat(document.getElementById('f-min').value)     || 0;
-  var payment = parseFloat(document.getElementById('f-payment').value) || min;
+  var payment = window._modalCalcPayment || min;
   var limit   = parseFloat(document.getElementById('f-limit').value)   || 0;
   var start   = document.getElementById('f-start').value;
   if(!name || !balance || !apr){ showToast('⚠️ Nombre, balance y APR son requeridos'); return; }
@@ -622,6 +638,40 @@ function showToast(msg){
 }
 
 // ═══════════════════════════════════════════════════════
+// ═══ PLAZO + CALC IN MODAL ═══
+var modalPlazo = 36;
+function setPlazo(n, btn){
+  modalPlazo = n;
+  document.querySelectorAll('.plazo-btn').forEach(function(b){
+    b.style.background = 'transparent';
+    b.style.color = 'rgba(240,244,255,0.5)';
+    b.style.borderColor = 'rgba(255,255,255,0.07)';
+  });
+  btn.style.background = 'rgba(0,214,143,0.15)';
+  btn.style.color = '#00d68f';
+  btn.style.borderColor = 'rgba(0,214,143,0.4)';
+  calcModalPayment();
+}
+function calcModalPayment(){
+  var b = parseFloat(document.getElementById('f-balance') ? document.getElementById('f-balance').value : 0) || 0;
+  var apr = parseFloat(document.getElementById('f-apr') ? document.getElementById('f-apr').value : 0) || 0;
+  var res = document.getElementById('modal-calc-result');
+  if(!b || !apr || !res){ if(res) res.style.display='none'; return; }
+  var r = (apr/100)/12;
+  var pago = r === 0 ? b/modalPlazo : (b*r)/(1-Math.pow(1+r,-modalPlazo));
+  var totalInt = 0, bal = b;
+  for(var i=0;i<modalPlazo;i++){
+    var int = bal*r; totalInt+=int;
+    bal = bal+int-pago; if(bal<0) bal=0;
+  }
+  function fmt(n){ return '$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+  document.getElementById('modal-pago-calc').textContent = fmt(pago) + '/mes';
+  document.getElementById('modal-interes-calc').textContent = 'Interés estimado total: ' + fmt(totalInt) + ' en ' + modalPlazo + ' meses';
+  res.style.display = 'block';
+  // Store calculated payment for saveCard
+  window._modalCalcPayment = pago;
+}
+
 // INIT
 // ═══════════════════════════════════════════════════════
 
