@@ -124,6 +124,9 @@ body{background:var(--bg);color:var(--white);font-family:var(--font-b);min-heigh
 .modal-actions{display:flex;gap:10px;margin-top:20px;}
 .btn-cancel{flex:1;padding:12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;cursor:pointer;font-family:var(--font-b);font-size:14px;}
 .btn-save{flex:2;padding:12px;background:linear-gradient(135deg,var(--green),var(--green2));color:#080f1e;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-h);font-size:15px;font-weight:900;}
+.plazo-btn{padding:7px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.07);background:transparent;color:rgba(240,244,255,0.5);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;transition:all .2s;}
+.plazo-btn.active,.plazo-btn:hover{background:rgba(0,214,143,0.15);color:#00d68f;border-color:rgba(0,214,143,0.4);}
+
 
 /* MEMBER DETAIL */
 .member-detail{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
@@ -266,12 +269,28 @@ body{background:var(--bg);color:var(--white);font-family:var(--font-b);min-heigh
       <input id="c-name" type="text" placeholder="Ej. Visa Gold"/>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Balance ($)</label><input id="c-balance" type="number" min="0" step="0.01" placeholder="2500"/></div>
-      <div class="form-group"><label>APR (%)</label><input id="c-apr" type="number" min="0" max="100" step="0.01" placeholder="22.99"/></div>
+      <div class="form-group"><label>Balance ($)</label><input id="c-balance" type="number" min="0" step="0.01" placeholder="2500" oninput="calcFamModalPayment()"/></div>
+      <div class="form-group"><label>APR (%)</label><input id="c-apr" type="number" min="0" max="100" step="0.01" placeholder="22.99" oninput="calcFamModalPayment()"/></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Pago mínimo ($)</label><input id="c-min" type="number" min="0" step="0.01" placeholder="35"/></div>
-      <div class="form-group"><label>Pago deseado ($)</label><input id="c-payment" type="number" min="0" step="0.01" placeholder="150"/></div>
+    </div>
+    <div class="form-group">
+      <label>¿En cuántos meses quieres pagarlo?</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <button type="button" class="plazo-btn" onclick="setFamPlazo(12,this)">12 meses</button>
+        <button type="button" class="plazo-btn" onclick="setFamPlazo(24,this)">24 meses</button>
+        <button type="button" class="plazo-btn active" onclick="setFamPlazo(36,this)">36 meses</button>
+        <button type="button" class="plazo-btn" onclick="setFamPlazo(48,this)">48 meses</button>
+        <button type="button" class="plazo-btn" onclick="setFamPlazo(60,this)">60 meses</button>
+      </div>
+    </div>
+    <div id="fam-modal-calc-result" style="display:none;background:rgba(0,214,143,0.08);border:1px solid rgba(0,214,143,0.2);border-radius:12px;padding:14px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(0,214,143,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Pago mensual necesario</div>
+      <div id="fam-modal-pago" style="font-family:'Cabinet Grotesk',sans-serif;font-size:26px;font-weight:900;color:#00d68f;"></div>
+      <div id="fam-modal-int" style="font-size:12px;color:rgba(240,244,255,0.5);margin-top:4px;font-family:'JetBrains Mono',monospace;"></div>
+    </div>
+    <div class="form-row" style="display:none">
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeCardModal()">Cancelar</button>
@@ -366,7 +385,10 @@ function deleteMember(id){
 }
 function openAddCardToMember(memberId){
   addingCardMemberId=memberId;
-  ['c-name','c-balance','c-apr','c-min','c-payment'].forEach(function(id){document.getElementById(id).value='';});
+  ['c-name','c-balance','c-apr','c-min'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  famModalPlazo=36; window._famModalCalcPayment=0;
+  document.querySelectorAll('.plazo-btn').forEach(function(b,i){b.style.background=i===2?'rgba(0,214,143,0.15)':'transparent';b.style.color=i===2?'#00d68f':'rgba(240,244,255,0.5)';b.style.borderColor=i===2?'rgba(0,214,143,0.4)':'rgba(255,255,255,0.07)';});
+  var res=document.getElementById('fam-modal-calc-result');if(res)res.style.display='none';
   document.getElementById('cardModal').classList.add('open');
 }
 function closeCardModal(){document.getElementById('cardModal').classList.remove('open');}
@@ -379,7 +401,7 @@ function saveCardToMember(){
   var member=data.members.find(function(m){return m.id===addingCardMemberId;});
   if(!member)return;
   var min=parseFloat(document.getElementById('c-min').value)||0;
-  var payment=parseFloat(document.getElementById('c-payment').value)||min;
+  var payment=window._famModalCalcPayment||min;
   if(!member.cards) member.cards=[];
   member.cards.push({id:Date.now().toString(),name,balance,apr,min,payment});
   saveData(data); closeCardModal();
@@ -549,6 +571,33 @@ function exportPDF(){
 
 // ═══ TOAST ═══
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3000);}
+
+
+// === FAMILY PLAZO CALC ===
+var famModalPlazo = 36;
+function setFamPlazo(n, btn){
+  famModalPlazo = n;
+  document.querySelectorAll('.plazo-btn').forEach(function(b){
+    b.style.background='transparent'; b.style.color='rgba(240,244,255,0.5)'; b.style.borderColor='rgba(255,255,255,0.07)';
+  });
+  btn.style.background='rgba(0,214,143,0.15)'; btn.style.color='#00d68f'; btn.style.borderColor='rgba(0,214,143,0.4)';
+  calcFamModalPayment();
+}
+function calcFamModalPayment(){
+  var b=parseFloat(document.getElementById('c-balance')?document.getElementById('c-balance').value:0)||0;
+  var apr=parseFloat(document.getElementById('c-apr')?document.getElementById('c-apr').value:0)||0;
+  var res=document.getElementById('fam-modal-calc-result');
+  if(!b||!apr||!res){if(res)res.style.display='none';return;}
+  var r=(apr/100)/12;
+  var pago=r===0?b/famModalPlazo:(b*r)/(1-Math.pow(1+r,-famModalPlazo));
+  var totalInt=0,bal=b;
+  for(var i=0;i<famModalPlazo;i++){var int=bal*r;totalInt+=int;bal=bal+int-pago;if(bal<0)bal=0;}
+  function fmt(n){return'$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+  document.getElementById('fam-modal-pago').textContent=fmt(pago)+'/mes';
+  document.getElementById('fam-modal-int').textContent='Interés estimado: '+fmt(totalInt)+' en '+famModalPlazo+' meses';
+  res.style.display='block';
+  window._famModalCalcPayment=pago;
+}
 
 // ═══ INIT ═══
 
