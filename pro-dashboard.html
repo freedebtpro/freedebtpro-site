@@ -410,9 +410,9 @@ function openEditCard(id){
   document.getElementById('f-balance').value = card.balance || '';
   document.getElementById('f-apr').value     = card.apr     || '';
   document.getElementById('f-min').value     = card.min     || '';
-  document.getElementById('f-payment').value = card.payment || '';
   document.getElementById('f-limit').value   = card.limit   || '';
-  document.getElementById('f-start').value   = card.start   || '';
+  window._modalCalcPayment = parseFloat(card.payment) || 0;
+  calcModalPayment();
   document.getElementById('cardModal').classList.add('open');
 }
 function closeModal(){ document.getElementById('cardModal').classList.remove('open'); }
@@ -423,7 +423,7 @@ function saveCard(){
   var min     = parseFloat(document.getElementById('f-min').value)     || 0;
   var payment = window._modalCalcPayment || min;
   var limit   = parseFloat(document.getElementById('f-limit').value)   || 0;
-  var start   = document.getElementById('f-start').value;
+  var start   = new Date().toISOString().slice(0,7);
   if(!name || !balance || !apr){ showToast('⚠️ Nombre, balance y APR son requeridos'); return; }
   var cards = getCards();
   if(editingId){
