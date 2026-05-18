@@ -1,10 +1,11 @@
 [build]
   functions = "netlify/functions"
+  publish   = "."
 
 [functions]
   node_bundler = "esbuild"
+  included_files = ["netlify/functions/**"]
 
-# Stripe webhook endpoint — raw body needed for signature verification
 [[headers]]
   for = "/.netlify/functions/stripe-webhook"
   [headers.values]
