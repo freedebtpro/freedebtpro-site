@@ -1,0 +1,8 @@
+{
+  "name": "freedebtpro-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for FreeDebt Pro",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  }
+}
