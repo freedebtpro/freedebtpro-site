@@ -796,8 +796,16 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
       <input type="checkbox" id="m-legal" onchange="togglePayBtn()" style="width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:var(--green);cursor:pointer;"/>
       <label for="m-legal" style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.5;cursor:pointer;">Soy mayor de 18 años. He leído y acepto los <button onclick="abrirLegal('terms')" style="color:var(--green);text-decoration:underline;cursor:pointer;background:none;border:none;font-size:12px;font-family:inherit;padding:0;">Términos de Servicio</button> y la <button onclick="abrirLegal('privacy')" style="color:var(--green);text-decoration:underline;cursor:pointer;background:none;border:none;font-size:12px;font-family:inherit;padding:0;">Política de Privacidad</button>, incluyendo la cláusula de arbitraje vinculante.</label>
     </div>
-    <button id="m-pay-btn" onclick="irAPayPal()" disabled style="width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);font-family:'Cabinet Grotesk',sans-serif;font-size:17px;font-weight:900;cursor:not-allowed;opacity:0.4;transition:all 0.2s;">Continuar con PayPal →</button>
-    <div style="font-size:12px;color:rgba(255,255,255,0.5);text-align:center;margin-top:10px;line-height:1.7;">All payments are securely processed by PayPal. We never store your payment information.</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button id="m-pay-btn" onclick="irAPayPal()" disabled style="width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:900;cursor:not-allowed;opacity:0.4;transition:all 0.2s;">Continuar con PayPal →</button>
+      <div style="display:flex;align-items:center;gap:8px;justify-content:center;">
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+        <span style="font-size:11px;color:rgba(255,255,255,0.3);font-family:'JetBrains Mono',monospace;">o paga con tarjeta</span>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+      </div>
+      <button id="m-stripe-btn" onclick="irAStripe()" disabled style="width:100%;padding:15px;border-radius:14px;border:1.5px solid rgba(99,102,241,0.5);background:rgba(99,102,241,0.08);color:var(--white);font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:800;cursor:not-allowed;opacity:0.4;transition:all 0.2s;">💳 Pagar con tarjeta de crédito/débito</button>
+    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.4);text-align:center;margin-top:8px;line-height:1.7;">🔒 Pago seguro procesado en línea. No almacenamos tu información de pago.</div>
     <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px;font-size:12px;color:var(--green);font-family:'JetBrains Mono',monospace;">🔒 Pago seguro procesado en línea. No almacenamos tu información de pago.</div>
     <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;line-height:1.6;">Puedes cancelar tu suscripción en cualquier momento.<br>Soporte: <a href="mailto:support@freedebtpro.com" style="color:var(--green);">support@freedebtpro.com</a></div>
   </div>
@@ -849,6 +857,20 @@ var planKey = 'pro';
 // ── Show welcome screen if redirected back from PayPal ──
 (function(){
   try {
+    var _sp = new URLSearchParams(window.location.search);
+    if(_sp.get('checkout')==='cancelled'){
+      var cd=document.createElement('div');
+      cd.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:12px;padding:12px 24px;font-size:13px;color:#f87171;font-family:var(--font-m);z-index:500;';
+      cd.textContent='El pago fue cancelado. Puedes intentarlo de nuevo cuando quieras.';
+      document.body.appendChild(cd); setTimeout(function(){cd.remove();},5000);
+    }
+    var _sp = new URLSearchParams(window.location.search);
+    if(_sp.get('checkout')==='cancelled'){
+      var _cd=document.createElement('div');
+      _cd.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:12px;padding:12px 24px;font-size:13px;color:#f87171;font-family:var(--font-m);z-index:500;max-width:90vw;text-align:center;';
+      _cd.textContent='El pago fue cancelado. Puedes intentarlo de nuevo cuando quieras.';
+      document.body.appendChild(_cd); setTimeout(function(){_cd.remove();},5000);
+    }
     if(new URLSearchParams(window.location.search).get('welcome') === '1'){
       var ws = document.getElementById('welcomeScreen');
       if(ws) ws.style.display = 'flex';
@@ -995,6 +1017,34 @@ function togglePayBtn() {
   btn.disabled      = !ok;
   btn.style.opacity = ok ? '1' : '0.4';
   btn.style.cursor  = ok ? 'pointer' : 'not-allowed';
+  var sBtn = document.getElementById('m-stripe-btn');
+  if(sBtn){ sBtn.disabled=!ok; sBtn.style.opacity=ok?'1':'0.4'; sBtn.style.cursor=ok?'pointer':'not-allowed'; }
+}
+
+function irAStripe() {
+  if(typeof fbq === 'function') fbq('track', 'InitiateCheckout', { plan: planKey, payment_method: 'stripe' });
+  var em = document.getElementById('m-email');
+  var nm = document.getElementById('m-name');
+  var ln = document.getElementById('m-lastname');
+  var ph = document.getElementById('m-phone');
+  if(!em || em.value.indexOf('@') < 1){ alert('Por favor ingresa tu correo electrónico.'); if(em) em.focus(); return; }
+  var sBtn = document.getElementById('m-stripe-btn');
+  if(sBtn){ sBtn.textContent='Conectando...'; sBtn.disabled=true; sBtn.style.opacity='0.7'; }
+  var payload = { plan:planKey,
+    email:em?em.value.trim():'', firstName:nm?nm.value.trim():'',
+    lastName:ln?ln.value.trim():'', phone:ph?ph.value.trim():'' };
+  console.log('[Stripe] Session request:', planKey, payload.email);
+  fetch('/.netlify/functions/create-checkout',{
+    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)
+  }).then(function(r){return r.json();})
+  .then(function(d){
+    if(d.url){ console.log('[Stripe] Redirecting to checkout'); window.location.href=d.url; }
+    else throw new Error(d.error||'No checkout URL');
+  }).catch(function(err){
+    console.error('[Stripe] Error:',err.message);
+    if(sBtn){ sBtn.textContent='💳 Pagar con tarjeta de crédito/débito'; sBtn.disabled=false; sBtn.style.opacity='1'; }
+    alert('Error al conectar. Intenta con PayPal o escribe a support@freedebtpro.com');
+  });
 }
 
 function irAPayPal() {
