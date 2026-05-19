@@ -170,9 +170,9 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
 .footer-legal-links{display:flex;gap:20px;}
 .fll{font-size:12px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'Bricolage Grotesque',sans-serif;transition:color 0.2s;padding:0;}
 .fll:hover{color:var(--white);}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);z-index:500;display:none;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:20px 0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .modal-overlay.open{display:flex;}
-.modal-box{background:var(--dark2);border:1px solid var(--border2);border-radius:28px;padding:40px;width:100%;max-width:480px;position:relative;animation:popIn 0.3s cubic-bezier(0.32,0.72,0,1) both;}
+.modal-box{background:var(--dark2);border:1px solid var(--border2);border-radius:28px;padding:40px;width:100%;max-width:480px;position:relative;animation:popIn 0.3s cubic-bezier(0.32,0.72,0,1) both;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;margin:20px auto;}
 @keyframes popIn{from{opacity:0;transform:scale(0.94);}to{opacity:1;transform:scale(1);}}
 .modal-close{position:absolute;top:18px;right:18px;width:34px;height:34px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;font-size:18px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
 .modal-close:hover{background:rgba(255,255,255,0.12);color:var(--white);}
@@ -213,6 +213,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
 .calc-plazo-btn:hover{border-color:rgba(255,255,255,.3);color:var(--white)}
 .calc-plazo-active{background:rgba(0,214,143,.12)!important;border-color:var(--green)!important;color:var(--green)!important}
 
+@media(max-width:480px){.modal-overlay{padding:12px 0;}.modal-box{width:94vw;max-width:94vw;padding:28px 20px 36px;border-radius:20px;margin:12px auto;}#m-pay-btn,#m-stripe-btn{padding:16px;font-size:15px;}}
 </style>
 </head>
 <body>
