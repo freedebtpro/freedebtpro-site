@@ -1037,14 +1037,17 @@ function irAStripe() {
   console.log('[Stripe] Session request:', planKey, payload.email);
   fetch('/.netlify/functions/create-checkout',{
     method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)
-  }).then(function(r){return r.json();})
-  .then(function(d){
-    if(d.url){ console.log('[Stripe] Redirecting to checkout'); window.location.href=d.url; }
-    else throw new Error(d.error||'No checkout URL');
+  }).then(function(r){
+    console.log('[Stripe] HTTP status:', r.status);
+    return r.json().then(function(d){ return {status:r.status, data:d}; });
+  }).then(function(res){
+    console.log('[Stripe] Response body:', JSON.stringify(res.data));
+    if(res.data && res.data.url){ window.location.href=res.data.url; }
+    else throw new Error((res.data&&res.data.error)||'HTTP '+res.status+': No checkout URL');
   }).catch(function(err){
-    console.error('[Stripe] Error:',err.message);
+    console.error('[Stripe] FINAL ERROR:',err.message);
     if(sBtn){ sBtn.textContent='💳 Pagar con tarjeta de crédito/débito'; sBtn.disabled=false; sBtn.style.opacity='1'; }
-    alert('Error al conectar. Intenta con PayPal o escribe a support@freedebtpro.com');
+    alert('[DEBUG] ' + err.message);
   });
 }
 
