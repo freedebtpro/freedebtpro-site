@@ -189,6 +189,21 @@ body{
 .sched-row .s-int{color:var(--red);}
 .sched-row .s-bal{color:var(--blue);}
 
+
+/* ── LEAD CAPTURE OVERLAY ── */
+#leadOverlay{
+  position:fixed;inset:0;z-index:500;
+  background:var(--dark);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+#leadOverlay.hidden{display:none;}
+#leadModal{
+  background:var(--dark2);border:1px solid var(--border2);
+  border-radius:24px;
+  padding:0 0 32px;width:100%;max-width:440px;
+  animation:slideUp 0.3s cubic-bezier(0.32,0.72,0,1);
+}
 /* ── FAB ── */
 .fab{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
@@ -443,6 +458,32 @@ select option{background:var(--dark2);}
   <div class="section">
     <div class="sec-label">Pagos registrados</div>
     <div id="listaHistorial"></div>
+  </div>
+</div>
+
+<!-- LEAD CAPTURE — shown before card modal -->
+<div id="leadOverlay">
+  <div id="leadModal">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <div class="modal-title">Antes de continuar</div>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Nombre</label>
+        <input id="leadNombre" type="text" placeholder="Tu nombre completo" autocomplete="given-name"/>
+      </div>
+      <div class="field">
+        <label>Teléfono</label>
+        <input id="leadTelefono" type="tel" placeholder="+1 (305) 000-0000" autocomplete="tel"/>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input id="leadEmail" type="email" placeholder="tu@correo.com" autocomplete="email"/>
+      </div>
+      <button class="btn-submit" onclick="leadContinuar()">Continuar →</button>
+      <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:12px;font-family:'JetBrains Mono',monospace;">🔒 No spam. Tu información es privada.</p>
+    </div>
   </div>
 </div>
 
@@ -891,7 +932,46 @@ function cambiarTab(nombre, el) {
 }
 
 // ── MODAL AGREGAR/EDITAR ──
+
+// ── LEAD CAPTURE LOGIC ──
 function abrirModal() {
+  // Lead gate is shown on page load — by the time user taps this, lead is captured
+  _abrirModalOriginal();
+}
+
+function leadContinuar() {
+  const nombre = document.getElementById('leadNombre').value.trim();
+  const telefono = document.getElementById('leadTelefono').value.trim();
+  const email = document.getElementById('leadEmail').value.trim();
+
+  if (!nombre || !telefono || !email) {
+    alert('Por favor completa todos los campos.');
+    return;
+  }
+
+  // Save locally immediately
+  localStorage.setItem('fdp_lead_done', '1');
+  localStorage.setItem('fdp_lead', JSON.stringify({ nombre, telefono, email, ts: Date.now() }));
+
+  // Send to GHL (non-blocking)
+  const nameParts = nombre.split(' ');
+  fetch('/api/ghl-contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName: nameParts[0] || nombre,
+      lastName: nameParts.slice(1).join(' ') || '',
+      email,
+      phone: telefono
+    })
+  }).catch(() => {}); // silent fail
+
+  // Hide lead overlay and open card modal
+  document.getElementById('leadOverlay').classList.add('hidden');
+  _abrirModalOriginal();
+}
+
+function _abrirModalOriginal() {
   editandoId = null;
   document.getElementById('modalTitulo').textContent = 'Agregar Tarjeta';
   document.getElementById('btnGuardar').textContent = 'Guardar Tarjeta';
@@ -903,6 +983,7 @@ function abrirModal() {
   document.getElementById('modalOverlay').classList.add('open');
   setTimeout(() => document.getElementById('tNombre').focus(), 300);
 }
+
 
 function cerrarModal() { document.getElementById('modalOverlay').classList.remove('open'); }
 
@@ -1175,6 +1256,16 @@ function cerrarLegalSiFondo(e) { if (e.target.id === 'legalOverlay') cerrarLegal
 
 
 render();
+
+// On load: if lead already captured, skip the gate
+if (localStorage.getItem('fdp_lead_done')) {
+  document.getElementById('leadOverlay').classList.add('hidden');
+}
+// Focus first field
+setTimeout(function() {
+  var el = document.getElementById('leadNombre');
+  if (el && !localStorage.getItem('fdp_lead_done')) el.focus();
+}, 400);
 </script>
 </body>
 </html>

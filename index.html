@@ -268,6 +268,42 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
 <!-- CALCULADORA #start -->
 <div id="start" style="background:var(--dark2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 24px;">
 <div style="max-width:680px;margin:0 auto;">
+
+  <!-- ── LEAD FORM (shown first) ── -->
+  <div id="leadForm" style="text-align:center;display:block;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.2);color:var(--green);border-radius:99px;padding:6px 16px;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;">🧮 Empieza tu cálculo</div>
+    <h2 style="font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-1px;margin-bottom:12px;">Descubre cuánto te cuestan tus intereses</h2>
+    <p style="font-size:16px;color:var(--muted);line-height:1.65;max-width:520px;margin:0 auto 32px;">Ingresa tus datos para ver tu análisis gratis.</p>
+    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:20px;padding:32px 28px;text-align:left;max-width:480px;margin:0 auto;">
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Nombre completo *</label>
+        <input id="lead-nombre" type="text" placeholder="Tu nombre completo" autocomplete="name"
+          style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Teléfono *</label>
+        <input id="lead-telefono" type="tel" placeholder="+1 (305) 000-0000" autocomplete="tel"
+          style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
+      </div>
+      <div style="margin-bottom:24px;">
+        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Email *</label>
+        <input id="lead-email" type="email" placeholder="tu@correo.com" autocomplete="email"
+          style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
+      </div>
+      <button onclick="leadContinuar()" id="leadBtn"
+        style="width:100%;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);border:none;border-radius:12px;padding:15px;font-family:'Cabinet Grotesk',sans-serif;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 6px 24px rgba(0,214,143,0.3);">
+        Continuar →
+      </button>
+      <p style="font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:12px;font-family:'JetBrains Mono',monospace;">🔒 No spam. Tu información es privada y segura.</p>
+    </div>
+  </div>
+  <!-- ── END LEAD FORM ── -->
+
+  <!-- ── CALCULATOR (hidden until lead captured) ── -->
+  <div id="calcSection" style="display:none;">
   <div style="text-align:center;margin-bottom:40px;">
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.2);color:var(--green);border-radius:99px;padding:6px 16px;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;">🧮 Empieza tu cálculo</div>
     <h2 style="font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-1px;margin-bottom:12px;">Descubre cuánto te cuestan tus intereses</h2>
@@ -347,49 +383,18 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
         <div style="font-size:10px;color:#f87171;font-family:'JetBrains Mono',monospace;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Interés aprox. que podrías pagar en 5 años si continúas igual</div>
         <div id="calc-5yr" style="font-family:'Cabinet Grotesk',sans-serif;font-size:28px;font-weight:900;color:#f87171;">—</div>
       </div>
-      <!-- Formulario GHL -->
-      <div style="border:1px solid rgba(0,214,143,.25);border-radius:14px;padding:22px;background:linear-gradient(135deg,rgba(0,214,143,.08),rgba(0,214,143,.03));margin-bottom:16px;">
-        <div style="text-align:center;margin-bottom:14px;">
-          <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:18px;font-weight:900;margin-bottom:4px;">Guárdame este cálculo y envíamelo por email</div>
-          <p style="font-size:13px;color:var(--muted);">Te enviaremos una copia de tu cálculo y consejos para ayudarte a organizar tus tarjetas.</p>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-          <div>
-            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">First Name *</label>
-            <input id="calc-name" type="text" placeholder="Tu nombre"
-              style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(0,214,143,.2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;"
-              onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(0,214,143,.2)'"
-              oninput="toggleCalcBtn()"/>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-          <div>
-            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Last Name</label>
-            <input id="calc-lastname" type="text" placeholder="Tu apellido"
-              style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(0,214,143,.2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;"
-              onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(0,214,143,.2)'"/>
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Phone *</label>
-            <input id="calc-phone" type="tel" placeholder="305-555-1234"
-              style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(0,214,143,.2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;"
-              onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(0,214,143,.2)'"
-              oninput="toggleCalcBtn()"/>
-          </div>
-        </div>
-        <div style="margin-bottom:14px;">
-          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Email *</label>
-          <input id="calc-email" type="email" placeholder="tu@correo.com"
-            style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(0,214,143,.2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;"
-            onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(0,214,143,.2)'"
-            oninput="toggleCalcBtn()"/>
-        </div>
-        <button id="calc-submit-btn" onclick="calcFormSubmit()" disabled
-          style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:900;cursor:not-allowed;opacity:0.4;transition:all .2s;">
-          Enviarme mi plan gratis
+      <!-- Envío plan — datos ya capturados en paso 1 -->
+      <div style="border:1px solid rgba(0,214,143,.25);border-radius:14px;padding:22px;background:linear-gradient(135deg,rgba(0,214,143,.08),rgba(0,214,143,.03));margin-bottom:16px;text-align:center;">
+        <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:17px;font-weight:900;margin-bottom:8px;">Tu cálculo está listo. Presiona el botón para recibir tu plan gratuito.</div>
+        <input type="hidden" id="calc-name"/>
+        <input type="hidden" id="calc-lastname"/>
+        <input type="hidden" id="calc-phone"/>
+        <input type="hidden" id="calc-email"/>
+        <button id="calc-submit-btn" onclick="calcFormSubmit()"
+          style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:8px;">
+          Enviar mi plan gratis
         </button>
         <div id="calc-email-msg" style="display:none;margin-top:10px;font-size:13px;text-align:center;border-radius:10px;padding:10px 14px;"></div>
-        <p style="font-size:11px;color:rgba(255,255,255,.3);text-align:center;margin-top:8px;font-family:'JetBrains Mono',monospace;">🔒 No spam. No compartimos tu información.</p>
       </div>
       <!-- Upsell -->
       <div style="background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:14px;padding:20px 22px;margin-bottom:20px;text-align:center;">
@@ -1383,17 +1388,21 @@ function calcIrPayPal(tipo){
 }
 
 function toggleCalcBtn() {
-  var fn  = document.getElementById('calc-name');
-  var ph  = document.getElementById('calc-phone');
-  var em  = document.getElementById('calc-email');
-  var btn = document.getElementById('calc-submit-btn');
-  if (!btn) return;
-  var ok = fn && fn.value.trim().length > 0
-         && ph && ph.value.trim().length > 6
-         && em && em.value.indexOf('@') > 0;
-  btn.disabled      = !ok;
-  btn.style.opacity = ok ? '1' : '0.4';
-  btn.style.cursor  = ok ? 'pointer' : 'not-allowed';
+  // Data comes from step 1 — button always enabled
+}
+
+function populateConfirmBox() {
+  // Fill hidden inputs from step 1 lead data
+  var lead = JSON.parse(localStorage.getItem('fdp_lead') || '{}');
+  var nameParts = (lead.nombre || '').split(' ');
+  var fn = document.getElementById('calc-name');
+  var ln = document.getElementById('calc-lastname');
+  var ph = document.getElementById('calc-phone');
+  var em = document.getElementById('calc-email');
+  if (fn) fn.value = nameParts[0] || lead.nombre || '';
+  if (ln) ln.value = nameParts.slice(1).join(' ') || '';
+  if (ph) ph.value = lead.telefono || '';
+  if (em) em.value = lead.email || '';
 }
 
 function calcFormSubmit(e) {
@@ -1520,6 +1529,51 @@ function calcFormSubmit(e) {
     }
   }, {passive:true});
 })();
+
+// ── LEAD CAPTURE (index.html) ──
+function leadContinuar() {
+  var nombre = document.getElementById('lead-nombre').value.trim();
+  var telefono = document.getElementById('lead-telefono').value.trim();
+  var email = document.getElementById('lead-email').value.trim();
+
+  if (!nombre || !telefono || !email) {
+    alert('Por favor completa todos los campos.');
+    return;
+  }
+  if (!email.includes('@')) {
+    alert('Por favor ingresa un email válido.');
+    return;
+  }
+
+  var btn = document.getElementById('leadBtn');
+  btn.textContent = 'Guardando...';
+  btn.disabled = true;
+
+  // Save locally immediately
+  localStorage.setItem('fdp_lead_done', '1');
+  localStorage.setItem('fdp_lead', JSON.stringify({ nombre: nombre, telefono: telefono, email: email, ts: Date.now() }));
+
+  // Send to GHL non-blocking
+  var nameParts = nombre.split(' ');
+  fetch('/api/ghl-contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName: nameParts[0] || nombre,
+      lastName: nameParts.slice(1).join(' ') || '',
+      email: email,
+      phone: telefono
+    })
+  }).catch(function(){});
+
+  // Show calculator
+  document.getElementById('leadForm').style.display = 'none';
+  document.getElementById('calcSection').style.display = 'block';
+}
+
+// Always show lead form first — never skip it
+// calcSection starts as display:none in HTML, leadForm starts visible
+
 </script>
 </body>
 </html>
