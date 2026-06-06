@@ -279,19 +279,19 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
         <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Nombre completo *</label>
         <input id="lead-nombre" type="text" placeholder="Tu nombre completo" autocomplete="name"
           style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;"
-          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)';trackField('nombre');instantCapture();" oninput="trackField('nombre')"/>
       </div>
       <div style="margin-bottom:16px;">
         <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Teléfono *</label>
         <input id="lead-telefono" type="tel" placeholder="+1 (305) 000-0000" autocomplete="tel"
-          style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;"
-          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
+          style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)';trackField('telefono');instantCapture();" oninput="trackField('telefono')"/>
       </div>
       <div style="margin-bottom:24px;">
         <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Email *</label>
         <input id="lead-email" type="email" placeholder="tu@correo.com" autocomplete="email"
           style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;"
-          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"/>
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)';trackField('email');instantCapture();" oninput="trackField('email')"/>
       </div>
       <button onclick="leadContinuar()" id="leadBtn"
         style="width:100%;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);border:none;border-radius:12px;padding:15px;font-family:'Cabinet Grotesk',sans-serif;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 6px 24px rgba(0,214,143,0.3);">
@@ -1544,6 +1544,98 @@ function calcFormSubmit(e) {
 })();
 
 // ── LEAD CAPTURE (index.html) ──
+// ── TRACKING ──
+var _fdpTracked = {};
+function trackField(field) {
+  if (_fdpTracked[field]) return;
+  _fdpTracked[field] = true;
+  var events = { nombre: 'typed_name', telefono: 'typed_phone', email: 'typed_email' };
+  var ev = events[field];
+  if (!ev) return;
+  try {
+    var log = JSON.parse(localStorage.getItem('fdp_funnel') || '{}');
+    log[ev] = Date.now();
+    localStorage.setItem('fdp_funnel', JSON.stringify(log));
+  } catch(e) {}
+}
+
+function logFunnel(event) {
+  try {
+    var log = JSON.parse(localStorage.getItem('fdp_funnel') || '{}');
+    log[event] = Date.now();
+    localStorage.setItem('fdp_funnel', JSON.stringify(log));
+  } catch(e) {}
+}
+
+// ── INSTANT CAPTURE ──
+var _fdpCaptureSent = false;
+var _fdpCaptureTimer = null;
+
+function instantCapture() {
+  var nombre = document.getElementById('lead-nombre').value.trim();
+  var telefono = document.getElementById('lead-telefono').value.trim();
+  var email = document.getElementById('lead-email').value.trim();
+
+  // Need at minimum a valid email to save
+  if (!email || email.indexOf('@') < 1) return;
+  // Need at least name OR phone
+  if (!nombre && !telefono) return;
+  // Already sent this combo
+  var key = email + '|' + nombre + '|' + telefono;
+  if (_fdpCaptureSent === key) return;
+
+  // Debounce — wait 1.5s after user stops typing
+  clearTimeout(_fdpCaptureTimer);
+  _fdpCaptureTimer = setTimeout(function() {
+    _fdpCaptureSent = key;
+
+    // Save to localStorage immediately
+    localStorage.setItem('fdp_lead', JSON.stringify({
+      nombre: nombre, telefono: telefono, email: email, ts: Date.now(), partial: true
+    }));
+    logFunnel('instant_capture');
+
+    // Send to GHL webhook (same as full submit)
+    var nameParts = nombre.split(' ');
+    fetch(GHL_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'instant_capture',
+        firstName: nameParts[0] || nombre,
+        lastName: nameParts.slice(1).join(' ') || '',
+        email: email,
+        phone: telefono,
+        source: 'FreeDebt Pro - Instant Capture',
+        tags: ['freedebt-instant-capture', 'abandoned-lead']
+      })
+    }).catch(function(){});
+
+    // Also save via beforeunload in case they leave right away
+    window._fdpInstantLead = { nombre: nombre, telefono: telefono, email: email };
+  }, 1500);
+}
+
+// ── BEFOREUNLOAD — fire if user leaves with data typed ──
+window.addEventListener('beforeunload', function() {
+  var nombre = document.getElementById('lead-nombre') ? document.getElementById('lead-nombre').value.trim() : '';
+  var telefono = document.getElementById('lead-telefono') ? document.getElementById('lead-telefono').value.trim() : '';
+  var email = document.getElementById('lead-email') ? document.getElementById('lead-email').value.trim() : '';
+  if (email && email.indexOf('@') > 0 && (nombre || telefono) && !localStorage.getItem('fdp_lead_done')) {
+    // Sync beacon — fires even as page unloads
+    var nameParts = nombre.split(' ');
+    navigator.sendBeacon(GHL_WEBHOOK_URL, JSON.stringify({
+      type: 'abandoned_lead',
+      firstName: nameParts[0] || nombre,
+      lastName: nameParts.slice(1).join(' ') || '',
+      email: email,
+      phone: telefono,
+      source: 'FreeDebt Pro - Page Abandoned',
+      tags: ['freedebt-abandoned', 'page-exit']
+    }));
+  }
+});
+
 function leadContinuar() {
   var nombre = document.getElementById('lead-nombre').value.trim();
   var telefono = document.getElementById('lead-telefono').value.trim();
@@ -1565,9 +1657,25 @@ function leadContinuar() {
   // Save locally immediately
   localStorage.setItem('fdp_lead_done', '1');
   localStorage.setItem('fdp_lead', JSON.stringify({ nombre: nombre, telefono: telefono, email: email, ts: Date.now() }));
+  logFunnel('completed_step1');
 
-  // Send to GHL non-blocking
+  // Send to GHL — full lead with completed tag
   var nameParts = nombre.split(' ');
+  fetch(GHL_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      type: 'lead_completed',
+      firstName: nameParts[0] || nombre,
+      lastName: nameParts.slice(1).join(' ') || '',
+      email: email,
+      phone: telefono,
+      source: 'FreeDebt Pro - Lead Form Completed',
+      tags: ['freedebt-lead-completo', 'freedebt-calculadora']
+    })
+  }).catch(function(){});
+
+  // Also send via Netlify function for GHL contact creation
   fetch('/api/ghl-contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1586,6 +1694,7 @@ function leadContinuar() {
 
 // Always show lead form first — never skip it
 // calcSection starts as display:none in HTML, leadForm starts visible
+logFunnel('page_view');
 
 </script>
 </body>
