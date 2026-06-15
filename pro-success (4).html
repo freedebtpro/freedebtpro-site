@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1637117803989164');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1637117803989164&ev=PageView&noscript=1"/></noscript>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pago Confirmado — FreeDebt Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@700;900&family=Bricolage+Grotesque:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F9FC; --bg2:#fff; --bg3:#EEF2F7;
+  --navy:#0B1F3B; --blue:#2563EB;
+  --orange:#F97316; --orange2:#ea6c0a;
+  --green:#16A34A;
+  --text:#1F2937; --text2:#6B7280; --text3:#9CA3AF;
+  --border:#E5E7EB;
+}
+html{min-height:100%;}
+body{font-family:'Bricolage Grotesque',sans-serif;background:linear-gradient(160deg,#EEF4FF 0%,#DBEAFE 55%,#EDE9FE 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:13px 28px;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border);box-shadow:0 1px 8px rgba(0,0,0,.06);z-index:10;}
+.nav-brand{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.nav-icon{width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.nav-logo{font-family:'Cabinet Grotesk',sans-serif;font-size:18px;font-weight:900;color:var(--navy);}
+.nav-logo span{color:var(--blue);}
+
+/* CARD */
+.card{background:var(--bg2);border:1.5px solid var(--border);border-radius:24px;padding:48px 40px;max-width:520px;width:100%;text-align:center;box-shadow:0 4px 32px rgba(0,0,0,.10);margin-top:70px;}
+@media(max-width:540px){.card{padding:32px 22px;border-radius:18px;}}
+
+.check-circle{width:80px;height:80px;background:rgba(22,163,74,.1);border:2px solid rgba(22,163,74,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 24px;}
+
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.22);color:var(--green);border-radius:99px;padding:5px 16px;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;margin-bottom:18px;}
+
+h1{font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(26px,5vw,36px);font-weight:900;color:var(--navy);line-height:1.1;margin-bottom:14px;letter-spacing:-1px;}
+
+.subtitle{font-size:16px;color:var(--text2);line-height:1.7;margin-bottom:28px;max-width:380px;margin-left:auto;margin-right:auto;}
+
+/* BENEFIT BOX */
+.benefit-box{background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:22px 24px;text-align:left;margin-bottom:28px;}
+.benefit-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text);padding:6px 0;}
+.benefit-item+.benefit-item{border-top:1px solid var(--border);}
+.bcheck{color:var(--green);font-weight:800;font-size:15px;flex-shrink:0;}
+
+/* EMAIL REMINDER */
+.email-note{background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.18);border-radius:12px;padding:16px 18px;margin-bottom:28px;font-size:13px;color:var(--text2);line-height:1.65;font-family:'JetBrains Mono',monospace;}
+.email-note strong{color:var(--navy);}
+
+/* BUTTON */
+.btn-home{display:inline-block;background:var(--orange);color:#fff;border:none;border-radius:99px;padding:16px 38px;font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:900;cursor:pointer;text-decoration:none;box-shadow:0 6px 20px rgba(249,115,22,.3);transition:all .2s;width:100%;}
+.btn-home:hover{background:var(--orange2);transform:translateY(-2px);}
+.btn-note{font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;}
+
+/* FOOTER LINE */
+.footer-line{margin-top:32px;font-size:12px;color:var(--text2);font-family:'JetBrains Mono',monospace;text-align:center;line-height:1.7;}
+.footer-line a{color:var(--blue);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-brand" href="https://freedebtpro.app">
+    <div class="nav-icon">💳</div>
+    <div class="nav-logo">FreeDebt<span>Pro</span></div>
+  </a>
+</nav>
+
+<!-- CONFIRMATION CARD -->
+<div class="card">
+
+  <div class="check-circle">✅</div>
+
+  <div class="badge">✓ Pago Confirmado</div>
+
+  <h1>¡Gracias por tu compra!</h1>
+
+  <p class="subtitle">Hemos recibido tu pago correctamente. Tu reporte personalizado será preparado y enviado al correo electrónico registrado.</p>
+
+  <div class="email-note">
+    📧 <strong>Revisa tu bandeja de entrada</strong> y también la carpeta de <strong>spam</strong> por si acaso. El reporte llega en minutos.
+  </div>
+
+  <div class="benefit-box">
+    <div class="benefit-item"><span class="bcheck">✓</span>Pago único de $19.99</div>
+    <div class="benefit-item"><span class="bcheck">✓</span>Sin suscripción</div>
+    <div class="benefit-item"><span class="bcheck">✓</span>Sin cargos recurrentes</div>
+    <div class="benefit-item"><span class="bcheck">✓</span>Reporte personalizado enviado por email</div>
+    <div class="benefit-item"><span class="bcheck">✓</span>Tu información es privada y segura</div>
+  </div>
+
+  <a class="btn-home" href="https://freedebtpro.app">Volver al inicio</a>
+  <div class="btn-note">¿Problemas? Escríbenos a support@freedebtpro.com</div>
+
+</div>
+
+<div class="footer-line">
+  © 2026 FreeDebt Pro · FREENORTH ENTERPRISES, LLC · Miami, Florida, USA<br>
+  <a href="mailto:support@freedebtpro.com">support@freedebtpro.com</a>
+</div>
+
+<!-- Purchase Pixel Event -->
+<script>
+(function(){
+  try {
+    if(!sessionStorage.getItem('fdp_purchase_fired')){
+      sessionStorage.setItem('fdp_purchase_fired','1');
+      fbq('track','Purchase',{currency:'USD',value:19.99,content_name:'ReportePersonalizado'});
+    }
+  } catch(e){}
+})();
+</script>
+
+</body>
+</html>
