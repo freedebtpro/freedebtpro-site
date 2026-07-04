@@ -41,27 +41,29 @@ exports.handler = async function (event) {
     // Select correct Price ID dynamically from env
     const priceId    = planType === 'familiar' ? PRICE_FAMILY : PRICE_PRO;
     const planLabel  = planType === 'familiar' ? 'Familiar $29.99' : 'Pro $19.99';
+
+    // success_url goes to dashboard, not success page
     const successUrl = planType === 'familiar'
-      ? 'https://freedebtpro.app/family-success.html?session_id={CHECKOUT_SESSION_ID}&provider=stripe'
-      : 'https://freedebtpro.app/pro-success.html?session_id={CHECKOUT_SESSION_ID}&provider=stripe';
+      ? 'https://freedebtpro.app/family-dashboard.html?session_id={CHECKOUT_SESSION_ID}&provider=stripe'
+      : 'https://freedebtpro.app/pro-dashboard.html?session_id={CHECKOUT_SESSION_ID}&provider=stripe';
+
     const tag = planType === 'familiar' ? 'FreeDebtPro-FamiliarCheckout-Stripe' : 'FreeDebtPro-ProCheckout-Stripe';
 
     console.log('[Stripe] Using priceId:', priceId.slice(0,24) + '...');
 
     const session = await stripe.checkout.sessions.create({
-      mode:                 'subscription',
+      mode:                 'payment',           // one-time payment, not subscription
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: successUrl,
       cancel_url:  'https://freedebtpro.app/index.html?checkout=cancelled',
       ...(email && { customer_email: email }),
-      metadata:          { planType, firstName, lastName, phone, email, tag, source: 'FreeDebt Pro Stripe' },
-      subscription_data: { metadata: { planType, firstName, tag } },
+      metadata: { planType, firstName, lastName, phone, email, tag, source: 'FreeDebt Pro Stripe' },
     });
 
     console.log('[Stripe] Session created:', session.id, '| Plan:', planLabel);
 
-    // Send lead to GHL (non-blocking)
+    // Send lead to GHL (non-blocking) — tracks "Started Checkout"
     fetch(GHL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
