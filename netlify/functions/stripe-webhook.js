@@ -32,9 +32,15 @@ exports.handler = async function (event) {
   let stripeEvent;
 
   // ── Verify Stripe signature ──
+  // Netlify may deliver the body as base64 — Stripe needs the exact raw bytes
+  // to compute the signature, so we must decode before verifying.
   try {
+    const rawBody = event.isBase64Encoded
+      ? Buffer.from(event.body, 'base64')
+      : event.body;
+
     stripeEvent = stripe.webhooks.constructEvent(
-      event.body,
+      rawBody,
       sig,
       webhookSecret
     );
@@ -48,7 +54,7 @@ exports.handler = async function (event) {
   // ── Handle events ──
   switch (stripeEvent.type) {
 
-    // ── Checkout completed → subscription created ──
+    // ── Checkout completed → payment or subscription created ──
     case 'checkout.session.completed': {
       const session  = stripeEvent.data.object;
       const meta     = session.metadata || {};
@@ -80,7 +86,7 @@ exports.handler = async function (event) {
       break;
     }
 
-    // ── Invoice paid → recurring subscription renewed ──
+    // ── Invoice paid → recurring subscription renewed (not used in one-time payment mode, kept for safety) ──
     case 'invoice.paid': {
       const invoice  = stripeEvent.data.object;
       const email    = invoice.customer_email || '';
