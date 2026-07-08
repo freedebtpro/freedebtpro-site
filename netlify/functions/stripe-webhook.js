@@ -1,6 +1,13 @@
 // netlify/functions/stripe-webhook.js
 // Handles Stripe webhook events: checkout.session.completed, invoice.paid, etc.
 // Verifies Stripe signature, sends contact to GHL, handles subscription lifecycle
+//
+// NOTE: Uses the newer Netlify Functions (Web API / Request-Response) format
+// instead of the classic `exports.handler` (Lambda-compat) format.
+// The classic format's `event.body` gets re-serialized by Netlify's compatibility
+// layer for JSON content types, which breaks Stripe's signature verification
+// (it needs the exact raw bytes Stripe sent). `req.text()` in this format
+// returns the true unmodified raw body.
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
@@ -21,42 +28,23 @@ async function sendToGHL(payload) {
   }
 }
 
-exports.handler = async function (event) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method not allowed' };
+export default async (req) => {
+  if (req.method !== 'POST') {
+    return new Response('Method not allowed', { status: 405 });
   }
 
-  const sig            = event.headers['stripe-signature'];
+  const sig            = req.headers.get('stripe-signature');
   const webhookSecret  = process.env.STRIPE_WEBHOOK_SECRET;
-
-  // ── TEMP DEBUG LOGGING — remove once signature issue is fixed ──
-  console.log('[DEBUG] isBase64Encoded:', event.isBase64Encoded);
-  console.log('[DEBUG] typeof body:', typeof event.body);
-  console.log('[DEBUG] body length:', event.body ? event.body.length : 'null');
-  console.log('[DEBUG] body first 150 chars:', event.body ? event.body.substring(0, 150) : 'null');
-  console.log('[DEBUG] sig header present:', !!sig);
-  console.log('[DEBUG] sig header value:', sig);
-  console.log('[DEBUG] content-type header:', event.headers['content-type']);
-  console.log('[DEBUG] webhookSecret set:', !!webhookSecret, webhookSecret ? webhookSecret.substring(0,10)+'...' : 'MISSING');
+  const rawBody        = await req.text(); // exact raw bytes, unmodified
 
   let stripeEvent;
 
   // ── Verify Stripe signature ──
-  // Netlify may deliver the body as base64 — Stripe needs the exact raw bytes
-  // to compute the signature, so we must decode before verifying.
   try {
-    const rawBody = event.isBase64Encoded
-      ? Buffer.from(event.body, 'base64')
-      : event.body;
-
-    stripeEvent = stripe.webhooks.constructEvent(
-      rawBody,
-      sig,
-      webhookSecret
-    );
+    stripeEvent = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
   } catch (err) {
     console.error('[Stripe Webhook] Signature verification failed:', err.message);
-    return { statusCode: 400, body: `Webhook Error: ${err.message}` };
+    return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
   console.log('[Stripe Webhook] Event received:', stripeEvent.type);
@@ -64,7 +52,6 @@ exports.handler = async function (event) {
   // ── Handle events ──
   switch (stripeEvent.type) {
 
-    // ── Checkout completed → payment or subscription created ──
     case 'checkout.session.completed': {
       const session  = stripeEvent.data.object;
       const meta     = session.metadata || {};
@@ -79,7 +66,6 @@ exports.handler = async function (event) {
 
       console.log('[Stripe Webhook] Checkout completed. Email:', email, 'Plan:', planLabel);
 
-      // Send to GHL
       await sendToGHL({
         firstName:      meta.firstName || name.split(' ')[0] || '',
         lastName:       meta.lastName  || name.split(' ').slice(1).join(' ') || '',
@@ -96,12 +82,11 @@ exports.handler = async function (event) {
       break;
     }
 
-    // ── Invoice paid → recurring subscription renewed (not used in one-time payment mode, kept for safety) ──
     case 'invoice.paid': {
-      const invoice  = stripeEvent.data.object;
-      const email    = invoice.customer_email || '';
-      const subId    = invoice.subscription;
-      const amount   = (invoice.amount_paid / 100).toFixed(2);
+      const invoice = stripeEvent.data.object;
+      const email   = invoice.customer_email || '';
+      const subId   = invoice.subscription;
+      const amount  = (invoice.amount_paid / 100).toFixed(2);
 
       console.log('[Stripe Webhook] Invoice paid:', email, '$' + amount);
 
@@ -117,7 +102,6 @@ exports.handler = async function (event) {
       break;
     }
 
-    // ── Invoice payment failed ──
     case 'invoice.payment_failed': {
       const invoice = stripeEvent.data.object;
       const email   = invoice.customer_email || '';
@@ -134,7 +118,6 @@ exports.handler = async function (event) {
       break;
     }
 
-    // ── Subscription cancelled ──
     case 'customer.subscription.deleted': {
       const sub   = stripeEvent.data.object;
       const email = sub.metadata?.email || '';
@@ -156,5 +139,12 @@ exports.handler = async function (event) {
       console.log('[Stripe Webhook] Unhandled event type:', stripeEvent.type);
   }
 
-  return { statusCode: 200, body: JSON.stringify({ received: true }) };
+  return new Response(JSON.stringify({ received: true }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+  });
+};
+
+export const config = {
+  path: '/.netlify/functions/stripe-webhook',
 };
