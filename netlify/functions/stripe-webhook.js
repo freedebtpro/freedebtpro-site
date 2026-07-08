@@ -29,6 +29,16 @@ exports.handler = async function (event) {
   const sig            = event.headers['stripe-signature'];
   const webhookSecret  = process.env.STRIPE_WEBHOOK_SECRET;
 
+  // ── TEMP DEBUG LOGGING — remove once signature issue is fixed ──
+  console.log('[DEBUG] isBase64Encoded:', event.isBase64Encoded);
+  console.log('[DEBUG] typeof body:', typeof event.body);
+  console.log('[DEBUG] body length:', event.body ? event.body.length : 'null');
+  console.log('[DEBUG] body first 150 chars:', event.body ? event.body.substring(0, 150) : 'null');
+  console.log('[DEBUG] sig header present:', !!sig);
+  console.log('[DEBUG] sig header value:', sig);
+  console.log('[DEBUG] content-type header:', event.headers['content-type']);
+  console.log('[DEBUG] webhookSecret set:', !!webhookSecret, webhookSecret ? webhookSecret.substring(0,10)+'...' : 'MISSING');
+
   let stripeEvent;
 
   // ── Verify Stripe signature ──
