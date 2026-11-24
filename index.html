@@ -1823,8 +1823,8 @@ function calcUpdate(){
   var balance = parseFloat(document.getElementById('calc-balance').value) || 0;
   // Redondear APR a 2 decimales para evitar floats como 24.989999...
   var apr     = Math.round((parseFloat(document.getElementById('calc-apr').value) || 0) * 100) / 100;
-  // Actualizar el campo visualmente si el valor redondeado difiere
-  (function(){ var el = document.getElementById('calc-apr'); if(el && el.value && parseFloat(el.value) !== apr) el.value = apr; })();
+  // Actualizar el campo visualmente si el valor redondeado difiere — usar toFixed(2) para forzar string "24.99"
+  (function(){ var el = document.getElementById('calc-apr'); if(el && el.value && el.value !== apr.toFixed(2)) el.value = apr.toFixed(2); })();
   var pagoAct = parseFloat(document.getElementById('calc-pago').value)    || 0;
   var empty   = document.getElementById('calc-empty');
   var results = document.getElementById('calc-results');
@@ -1924,24 +1924,20 @@ function calcUpdate(){
   if(results) results.style.display = 'block';
 
   // ── Auto-seleccionar el plazo óptimo ──────────────────────────────
-  // Buscar el plazo MÁS LARGO (menor pago mensual) que aún cueste menos
-  // intereses que seguir con el pago actual. Así no se selecciona un plazo
-  // que requiera un pago mensual inalcanzable (ej. 12 meses a $304).
-  (function(){
-    var PLAZOS = [60, 48, 36, 24, 12]; // de mayor a menor → menor pago mensual primero
-    if(interesActual >= 99999) return; // pago insuficiente, no hacer nada
-    // ¿El plazo actual ya es óptimo?
-    if(!newPlanMoreExpensive) return;
-    // Buscar el plazo más largo que cueste menos intereses que el pago actual
+  // Siempre recalcular el mejor plazo con los valores actuales del form.
+  // Busca el MÁS LARGO (menor pago mensual) que cueste menos intereses
+  // que seguir pagando al ritmo actual. Si ninguno ahorra, deja el que esté.
+  if(!calcUpdate._auto && interesActual < 99999){
+    var PLAZOS = [60, 48, 36, 24, 12]; // de mayor a menor → menor pago mensual
     var mejorPlazo = null;
     for(var pi = 0; pi < PLAZOS.length; pi++){
       var pl = PLAZOS[pi];
-      var pNuevo = (r === 0) ? balance / pl : (balance * r) / (1 - Math.pow(1 + r, -pl));
-      var intNuevo = 0, bpl = balance;
+      var pOpt = (r === 0) ? balance / pl : (balance * r) / (1 - Math.pow(1 + r, -pl));
+      var intOpt = 0, bOpt = balance;
       for(var mi = 0; mi < pl; mi++){
-        var ipl = bpl * r; intNuevo += ipl; bpl = bpl + ipl - pNuevo; if(bpl < 0) bpl = 0;
+        var iOpt = bOpt * r; intOpt += iOpt; bOpt = bOpt + iOpt - pOpt; if(bOpt < 0) bOpt = 0;
       }
-      if(intNuevo < interesActual){ mejorPlazo = pl; break; }
+      if(intOpt < interesActual){ mejorPlazo = pl; break; }
     }
     if(mejorPlazo && mejorPlazo !== calcPlazo){
       calcPlazo = mejorPlazo;
@@ -1949,10 +1945,9 @@ function calcUpdate(){
         var meses = parseInt(b.textContent);
         b.classList.toggle('calc-plazo-active', meses === mejorPlazo);
       });
-      // Recalcular con el plazo óptimo (recursión con guardia)
-      if(!calcUpdate._auto){ calcUpdate._auto = true; calcUpdate(); calcUpdate._auto = false; }
+      calcUpdate._auto = true; calcUpdate(); calcUpdate._auto = false;
     }
-  })();
+  }
 
   // Save snapshot for dashboard auto-load
   try {
