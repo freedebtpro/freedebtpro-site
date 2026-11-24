@@ -1398,6 +1398,8 @@ function cfValidarTarjetas() {
       msg.style.display = 'none';
     }
   }
+  // Actualizar contador de tarjetas ingresadas cada vez que el usuario escribe
+  cfActualizarBtnAgregar();
 }
 
 function cfVerResumen() {
@@ -1819,7 +1821,10 @@ function calcSetPlazo(meses, btn){
 
 function calcUpdate(){
   var balance = parseFloat(document.getElementById('calc-balance').value) || 0;
-  var apr     = parseFloat(document.getElementById('calc-apr').value)     || 0;
+  // Redondear APR a 2 decimales para evitar floats como 24.989999...
+  var apr     = Math.round((parseFloat(document.getElementById('calc-apr').value) || 0) * 100) / 100;
+  // Actualizar el campo visualmente si el valor redondeado difiere
+  (function(){ var el = document.getElementById('calc-apr'); if(el && el.value && parseFloat(el.value) !== apr) el.value = apr; })();
   var pagoAct = parseFloat(document.getElementById('calc-pago').value)    || 0;
   var empty   = document.getElementById('calc-empty');
   var results = document.getElementById('calc-results');
@@ -1917,6 +1922,38 @@ function calcUpdate(){
   }
   if(empty)   empty.style.display   = 'none';
   if(results) results.style.display = 'block';
+
+  // ── Auto-seleccionar el plazo óptimo ──────────────────────────────
+  // Si el plazo actual cuesta más intereses que seguir con el pago actual,
+  // buscar el plazo más corto que sí ahorre y seleccionarlo automáticamente.
+  (function(){
+    var PLAZOS = [12, 24, 36, 48, 60];
+    if(interesActual >= 99999) return; // pago insuficiente, no hacer nada
+    // ¿El plazo actual ya es óptimo?
+    if(!newPlanMoreExpensive) return;
+    // Buscar el primer plazo (de menor a mayor) que cueste menos que el pago actual
+    var mejorPlazo = null;
+    for(var pi = 0; pi < PLAZOS.length; pi++){
+      var pl = PLAZOS[pi];
+      var rpl = r;
+      var pNuevo = (rpl === 0) ? balance / pl : (balance * rpl) / (1 - Math.pow(1 + rpl, -pl));
+      var intNuevo = 0, bpl = balance;
+      for(var mi = 0; mi < pl; mi++){
+        var ipl = bpl * rpl; intNuevo += ipl; bpl = bpl + ipl - pNuevo; if(bpl < 0) bpl = 0;
+      }
+      if(intNuevo < interesActual){ mejorPlazo = pl; break; }
+    }
+    if(mejorPlazo && mejorPlazo !== calcPlazo){
+      calcPlazo = mejorPlazo;
+      document.querySelectorAll('.calc-plazo-btn').forEach(function(b){
+        var meses = parseInt(b.textContent);
+        b.classList.toggle('calc-plazo-active', meses === mejorPlazo);
+      });
+      // Recalcular con el plazo óptimo (recursión con guardia)
+      if(!calcUpdate._auto){ calcUpdate._auto = true; calcUpdate(); calcUpdate._auto = false; }
+    }
+  })();
+
   // Save snapshot for dashboard auto-load
   try {
     var snap = {
