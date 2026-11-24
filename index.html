@@ -289,7 +289,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
       </div>
       <div>
         <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">APR / Interés anual (%)</label>
-        <input id="calc-apr" type="number" placeholder="Ej. 24.99" min="0" max="100" step="0.01" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'" oninput="calcUpdate()"/>
+        <input id="calc-apr" type="number" placeholder="Ej. 24.99" min="0" max="100" step="0.01" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:15px;padding:12px 14px;outline:none;" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)';(function(el){var v=parseFloat(el.value);if(!isNaN(v))el.value=(Math.round(v*100)/100).toFixed(2);})(this)" oninput="calcUpdate()"/>
       </div>
       <div>
         <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;">Pago mensual actual ($)</label>
@@ -1821,10 +1821,8 @@ function calcSetPlazo(meses, btn){
 
 function calcUpdate(){
   var balance = parseFloat(document.getElementById('calc-balance').value) || 0;
-  // Redondear APR a 2 decimales para evitar floats como 24.989999...
+  // Redondear APR a 2 decimales para los cálculos (no tocar el campo mientras el usuario escribe)
   var apr     = Math.round((parseFloat(document.getElementById('calc-apr').value) || 0) * 100) / 100;
-  // Actualizar el campo visualmente si el valor redondeado difiere — usar toFixed(2) para forzar string "24.99"
-  (function(){ var el = document.getElementById('calc-apr'); if(el && el.value && el.value !== apr.toFixed(2)) el.value = apr.toFixed(2); })();
   var pagoAct = parseFloat(document.getElementById('calc-pago').value)    || 0;
   var empty   = document.getElementById('calc-empty');
   var results = document.getElementById('calc-results');
