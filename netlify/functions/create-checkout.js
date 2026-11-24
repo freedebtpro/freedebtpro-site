@@ -63,12 +63,14 @@ exports.handler = async function (event) {
 
     console.log('[Stripe] Session created:', session.id, '| Plan:', planLabel);
 
-    // Send lead to GHL (non-blocking)
+    // Send lead to GHL (non-blocking) — tag diferente para NO disparar automatización de pago
+    // La notificación de pago confirmado solo debe venir del stripe-webhook (checkout.session.completed)
     fetch(GHL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ firstName, lastName, email, phone,
-        plan: planLabel, status: 'Started Checkout', source: 'FreeDebt Pro Stripe', tag,
+        plan: planLabel, status: 'Checkout Iniciado', source: 'FreeDebt Pro Stripe',
+        tag: 'FreeDebtPro-CheckoutStarted',
         submittedAt: new Date().toISOString() }),
     }).catch(function(e){ console.error('[GHL]', e.message); });
 

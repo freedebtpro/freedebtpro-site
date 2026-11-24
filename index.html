@@ -1491,13 +1491,15 @@ function cfPagar() {
     return 'Tarjeta ' + (i+1) + ': ' + (t.nombre || 'Sin nombre') + ' | Balance: $' + t.balance.toFixed(2) + ' | Pago: $' + t.pago.toFixed(2) + (t.apr ? ' | APR: ' + t.apr + '%' : '');
   }).join('\n');
 
+  // Tag diferente a los de pago confirmado — NO debe disparar automatización de pago en GHL
+  // La notificación real de pago solo la envía stripe-webhook.js (checkout.session.completed)
   var ghlPayload = {
     firstName: firstName, lastName: lastName,
     name: (firstName + ' ' + lastName).trim(),
     email: email, phone: phone,
-    plan: planName, status: 'Iniciando checkout',
+    plan: planName, status: 'Checkout Iniciado',
     source: 'FreeDebt Pro Pricing',
-    tag: cfPlanKey === 'pro' ? 'FreeDebtPro-PlusCheckout' : 'FreeDebtPro-FamiliarCheckout',
+    tag: 'FreeDebtPro-CheckoutStarted',
     numberOfCards: validCards.length,
     cardsSummary: cardsSummary,
     submittedAt: new Date().toISOString()
