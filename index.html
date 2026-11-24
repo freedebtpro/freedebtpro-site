@@ -355,7 +355,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
           <div>
-            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">First Name *</label>
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Nombre *</label>
             <input id="calc-name" type="text" placeholder="Tu nombre"
               style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(0,214,143,.2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;"
               onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(0,214,143,.2)'"
@@ -364,13 +364,13 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
           <div>
-            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Last Name</label>
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Apellido</label>
             <input id="calc-lastname" type="text" placeholder="Tu apellido"
               style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(0,214,143,.2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;"
               onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(0,214,143,.2)'"/>
           </div>
           <div>
-            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Phone *</label>
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Teléfono *</label>
             <input id="calc-phone" type="tel" placeholder="305-555-1234"
               style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(0,214,143,.2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;"
               onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(0,214,143,.2)'"
@@ -378,7 +378,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
           </div>
         </div>
         <div style="margin-bottom:14px;">
-          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Email *</label>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Correo *</label>
           <input id="calc-email" type="email" placeholder="tu@correo.com"
             style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(0,214,143,.2);border-radius:10px;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;"
             onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(0,214,143,.2)'"
@@ -396,7 +396,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
         <p style="font-size:14px;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:16px;">📊 ⚠️ Este cálculo muestra solo una parte de tu situación financiera. Para ver <strong style="color:var(--white)">TODAS tus tarjetas</strong> y organiza una estrategia más completa para avanzar.</p>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
           <button onclick="abrirFlujoPago('pro')" style="background:linear-gradient(135deg,var(--green),var(--green2));color:var(--dark);border:none;border-radius:12px;padding:12px 22px;font-family:'Cabinet Grotesk',sans-serif;font-size:15px;font-weight:800;cursor:pointer;">Reporte Plus 3-5 tarjetas — $19.99 →</button>
-          <button onclick="abrirFlujoPago('familiar')" style="background:transparent;color:var(--white);border:1.5px solid var(--border2);border-radius:12px;padding:12px 22px;font-family:'Cabinet Grotesk',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Reporte Familiar +5 tarjetas — $29.99 →</button>
+          <button onclick="abrirFlujoPago('familiar')" style="background:transparent;color:var(--white);border:1.5px solid var(--border2);border-radius:12px;padding:12px 22px;font-family:'Cabinet Grotesk',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Reporte Familiar 6+ tarjetas — $29.99 →</button>
         </div>
       </div>
     </div><!-- end results -->
@@ -442,13 +442,13 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
     <div class="phone">
       <div class="phone-notch"></div>
       <div class="phone-card">
-        <div class="pc-top"><div><div class="pc-issuer">BANAMEX</div><div class="pc-name">Oro Card</div></div><div class="pc-apr">22.99% APR</div></div>
+        <div class="pc-top"><div><div class="pc-issuer">CHASE</div><div class="pc-name">Freedom Unlimited</div></div><div class="pc-apr">22.99% APR</div></div>
         <div class="pc-balance">$4,250.00</div><div class="pc-balance-lbl">SALDO ACTUAL</div>
         <div class="pc-bar"><div class="pc-fill" style="width:38%"></div></div>
         <div class="pc-row"><span class="lbl">Mensual: $250</span><span class="val">~19 meses</span></div>
       </div>
       <div class="phone-card" style="margin-bottom:10px;">
-        <div class="pc-top"><div><div class="pc-issuer">BBVA</div><div class="pc-name">Azul Card</div></div><div class="pc-apr">28.74% APR</div></div>
+        <div class="pc-top"><div><div class="pc-issuer">CAPITAL ONE</div><div class="pc-name">Quicksilver</div></div><div class="pc-apr">28.74% APR</div></div>
         <div class="pc-balance">$1,890.00</div><div class="pc-balance-lbl">SALDO ACTUAL</div>
         <div class="pc-bar"><div class="pc-fill" style="width:62%;background:linear-gradient(90deg,#f59e0b,#fcd34d);"></div></div>
         <div class="pc-row"><span class="lbl">Mensual: $150</span><span class="val">~14 meses</span></div>
@@ -470,8 +470,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
   <div class="feat-grid">
     <div class="feat-card"><div class="feat-ic">🧮</div><div class="feat-title">Calculadora de Pagos</div><div class="feat-body">Actualiza las proyecciones en tiempo real mientras ajustas tus pagos mensuales.</div></div>
     <div class="feat-card"><div class="feat-ic">📅</div><div class="feat-title">Calendario de Pagos</div><div class="feat-body">Ve cada pago desglosado: cuánto va a intereses vs. capital, y tu saldo proyectado mes a mes.</div></div>
-    <div class="feat-card"><div class="feat-ic">🏔️</div><div class="feat-title">Método Avalanche</div><div class="feat-body">Prioriza tarjetas con APR más alto para reducir intereses proyectados.</div></div>
-    <div class="feat-card"><div class="feat-ic">⛄</div><div class="feat-title">Método Snowball</div><div class="feat-body">Prioriza balances pequeños para generar progreso más rápido.</div></div>
+    <div class="feat-card"><div class="feat-ic">🏔️</div><div class="feat-title">Método Avalancha</div><div class="feat-body">Prioriza tarjetas con APR más alto para reducir intereses proyectados.</div></div>
+    <div class="feat-card"><div class="feat-ic">⛄</div><div class="feat-title">Método Bola de nieve</div><div class="feat-body">Prioriza balances pequeños para generar progreso más rápido.</div></div>
     <div class="feat-card"><div class="feat-ic">⚠️</div><div class="feat-title">Alertas de Pago Bajo</div><div class="feat-body">Te avisa cuando el pago mensual es insuficiente para cubrir los intereses y avanzar.</div></div>
     <div class="feat-card"><div class="feat-ic">💾</div><div class="feat-title">Seguimiento Mensual</div><div class="feat-body">Registra tus pagos reales y sigue tu progreso a lo largo del tiempo.</div></div>
   </div>
@@ -557,7 +557,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
     <!-- PRO -->
     <div class="plan hot">
       <div class="plan-tag">⚡ MÁS POPULAR</div>
-      <div class="plan-tier">Pro</div>
+      <div class="plan-tier">Plus</div>
       <div class="plan-price-row"><span class="p-curr" style="color:var(--green);">$</span><span class="p-num">19</span><span class="p-dec">.99</span></div>
       <div class="plan-billing">Pago único · Sin suscripción · Sin cargos recurrentes</div>
       <div class="plan-desc">Reporte PDF personalizado de 3 a 5 tarjetas con plan de pagos, intereses proyectados y estrategia de prioridad.</div>
@@ -566,7 +566,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
         <li><span class="pf-check">✓</span> De <strong>3 a 5 tarjetas</strong> de crédito</li>
         <li><span class="pf-check">✓</span> Desglose detallado por tarjeta (balance, APR, pago)</li>
         <li><span class="pf-check">✓</span> Proyección de intereses y tiempo de pago</li>
-        <li><span class="pf-check">✓</span> Estrategias Avalanche y Snowball</li>
+        <li><span class="pf-check">✓</span> Estrategias Avalancha y Bola de nieve</li>
         <li><span class="pf-check">✓</span> Reporte PDF entregado por email en minutos</li>
         <li><span class="pf-check">✓</span> Ahorro estimado en intereses</li>
         <li><span class="pf-check">✓</span> Soporte por email</li>
@@ -582,13 +582,13 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
       <div class="plan-tier">Familiar</div>
       <div class="plan-price-row"><span class="p-curr">$</span><span class="p-num">29</span><span class="p-dec">.99</span></div>
       <div class="plan-billing">Pago único · Sin suscripción · Sin cargos recurrentes</div>
-      <div class="plan-desc">Reporte PDF para familias con más de 5 tarjetas en total — organiza la deuda de todos en un solo plan.</div>
+      <div class="plan-desc">Reporte PDF para familias con 6 o más tarjetas en total — organiza la deuda de todos en un solo plan.</div>
       <div class="plan-hr"></div>
       <ul class="plan-feats">
-        <li><span class="pf-check">✓</span> <strong>Más de 5 tarjetas</strong> en total (familia)</li>
+        <li><span class="pf-check">✓</span> <strong>6 o más tarjetas</strong> en total (familia)</li>
         <li><span class="pf-check">✓</span> Desglose detallado por cada tarjeta</li>
         <li><span class="pf-check">✓</span> Proyección de intereses y tiempo de pago</li>
-        <li><span class="pf-check">✓</span> Estrategias Avalanche y Snowball para toda la familia</li>
+        <li><span class="pf-check">✓</span> Estrategias Avalancha y Bola de nieve para toda la familia</li>
         <li><span class="pf-check">✓</span> Reporte PDF con plan completo familiar</li>
         <li><span class="pf-check">✓</span> Ahorro estimado total en intereses</li>
         <li><span class="pf-check">✓</span> Soporte prioritario por email</li>
@@ -611,7 +611,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:48px 32
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;font-size:14px;color:rgba(255,255,255,0.75);">
       <div>✅ Organiza múltiples tarjetas</div>
       <div>✅ Visualiza intereses proyectados</div>
-      <div>✅ Estrategias Avalanche y Snowball</div>
+      <div>✅ Estrategias Avalancha y Bola de nieve</div>
       <div>✅ Calendario de pagos</div>
       <div>✅ Seguimiento de progreso</div>
       <div>✅ Exportación PDF</div>
@@ -1193,7 +1193,7 @@ function abrirFlujoPago(tipo) {
     var lblEl2 = document.getElementById('cf-plan-label');
     if (lblEl2) lblEl2.textContent = 'Plan Familiar — $29.99';
     var dscEl2 = document.getElementById('cf-plan-desc');
-    if (dscEl2) dscEl2.textContent = 'El Plan Familiar es para más de 5 tarjetas. Agrega al menos 6 a continuación.';
+    if (dscEl2) dscEl2.textContent = 'El Plan Familiar es para 6 o más tarjetas. Agrega mínimo 6 a continuación.';
   }
 
   // Pre-llenar datos de contacto si ya los tenemos (Arreglo 6)
@@ -1340,10 +1340,19 @@ function cfActualizarBtnAgregar() {
   addBtn.style.display = currentCards >= cfMaxCards ? 'none' : 'block';
   var planDesc = document.getElementById('cf-plan-desc');
   if (planDesc) {
+    // Count only cards with at least balance filled
+    var filledCards = 0;
+    if (container) {
+      container.querySelectorAll('.cf-card-item').forEach(function(item) {
+        var bal = item.querySelector('[data-field="balance"]');
+        if (bal && parseFloat(bal.value) > 0) filledCards++;
+      });
+    }
+    var countLabel = filledCards > 0 ? '(' + filledCards + ' ingresadas)' : '(0 ingresadas)';
     if (cfPlanKey === 'pro') {
-      planDesc.textContent = 'Plan Plus: de 3 a 5 tarjetas (' + currentCards + ' ingresadas)';
+      planDesc.textContent = 'Plan Plus: de 3 a 5 tarjetas ' + countLabel;
     } else {
-      planDesc.textContent = 'Plan Familiar: más de 5 tarjetas (' + currentCards + ' ingresadas)';
+      planDesc.textContent = 'Plan Familiar: 6 o más tarjetas ' + countLabel;
     }
   }
 }
@@ -1984,7 +1993,7 @@ function calcFormSubmit(e) {
       'Tarjeta: ' + ((document.getElementById('calc-nombre') ? document.getElementById('calc-nombre').value : '') || 'Mi tarjeta') + '\n'
       + 'L\u00edmite de cr\u00e9dito: $' + (parseFloat(document.getElementById('calc-limite') ? document.getElementById('calc-limite').value : 0) || 0).toFixed(2) + '\n'
       + 'Balance actual: $' + (parseFloat(document.getElementById('calc-balance') ? document.getElementById('calc-balance').value : 0) || 0).toFixed(2) + '\n'
-      + 'APR: ' + (parseFloat(document.getElementById('calc-apr') ? document.getElementById('calc-apr').value : 0) || 0) + '%\n'
+      + 'APR: ' + (parseFloat(document.getElementById('calc-apr') ? document.getElementById('calc-apr').value : 0) || 0).toFixed(2) + '%\n'
       + 'Pago mensual actual: $' + (parseFloat(document.getElementById('calc-pago') ? document.getElementById('calc-pago').value : 0) || 0).toFixed(2) + '\n'
       + 'Plan elegido: ' + calcPlazo + ' meses\n'
       + 'Pago mensual estimado: $' + (Math.round((window._calcPagoNuevo || 0) * 100) / 100).toFixed(2) + '\n'
