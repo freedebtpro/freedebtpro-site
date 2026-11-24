@@ -1348,7 +1348,7 @@ function cfActualizarBtnAgregar() {
         if (bal && parseFloat(bal.value) > 0) filledCards++;
       });
     }
-    var countLabel = filledCards > 0 ? '(' + filledCards + ' ingresadas)' : '(0 ingresadas)';
+    var countLabel = filledCards === 1 ? '(1 ingresada)' : '(' + filledCards + ' ingresadas)';
     if (cfPlanKey === 'pro') {
       planDesc.textContent = 'Plan Plus: de 3 a 5 tarjetas ' + countLabel;
     } else {
@@ -1924,22 +1924,22 @@ function calcUpdate(){
   if(results) results.style.display = 'block';
 
   // ── Auto-seleccionar el plazo óptimo ──────────────────────────────
-  // Si el plazo actual cuesta más intereses que seguir con el pago actual,
-  // buscar el plazo más corto que sí ahorre y seleccionarlo automáticamente.
+  // Buscar el plazo MÁS LARGO (menor pago mensual) que aún cueste menos
+  // intereses que seguir con el pago actual. Así no se selecciona un plazo
+  // que requiera un pago mensual inalcanzable (ej. 12 meses a $304).
   (function(){
-    var PLAZOS = [12, 24, 36, 48, 60];
+    var PLAZOS = [60, 48, 36, 24, 12]; // de mayor a menor → menor pago mensual primero
     if(interesActual >= 99999) return; // pago insuficiente, no hacer nada
     // ¿El plazo actual ya es óptimo?
     if(!newPlanMoreExpensive) return;
-    // Buscar el primer plazo (de menor a mayor) que cueste menos que el pago actual
+    // Buscar el plazo más largo que cueste menos intereses que el pago actual
     var mejorPlazo = null;
     for(var pi = 0; pi < PLAZOS.length; pi++){
       var pl = PLAZOS[pi];
-      var rpl = r;
-      var pNuevo = (rpl === 0) ? balance / pl : (balance * rpl) / (1 - Math.pow(1 + rpl, -pl));
+      var pNuevo = (r === 0) ? balance / pl : (balance * r) / (1 - Math.pow(1 + r, -pl));
       var intNuevo = 0, bpl = balance;
       for(var mi = 0; mi < pl; mi++){
-        var ipl = bpl * rpl; intNuevo += ipl; bpl = bpl + ipl - pNuevo; if(bpl < 0) bpl = 0;
+        var ipl = bpl * r; intNuevo += ipl; bpl = bpl + ipl - pNuevo; if(bpl < 0) bpl = 0;
       }
       if(intNuevo < interesActual){ mejorPlazo = pl; break; }
     }
